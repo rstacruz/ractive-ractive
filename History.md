@@ -1,3 +1,7 @@
+## v0.3.2 - September 24, 2014
+
+* Ensure write-locks get unlocked even when execptions are thrown.
+
 ## v0.3.1 - September 24, 2014
 
 * Make the write lock work globally, not just per adaptor. This theoretically 
