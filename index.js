@@ -54,7 +54,7 @@
     }
 
     function reset (object) {
-      if (object.constructor === Object) {
+      if (object && object.constructor === Object) {
         child.set(object);
       } else {
         return false;
