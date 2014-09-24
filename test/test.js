@@ -34,6 +34,14 @@ describe('simple', function () {
     expect(parent.get('child.one')).eql(1);
   });
 
+  it(".reset on child gets picked up", function () {
+    parent.set('child', child);
+    child.reset({ ten: 10, eleven: 11 });
+
+    expect(parent.get('child.ten')).eql(10);
+    expect(parent.get('child.eleven')).eql(11);
+  });
+
   it('propagates changes from child to parent', function () {
     child.set('two', 1);
     parent.set('child', child);
