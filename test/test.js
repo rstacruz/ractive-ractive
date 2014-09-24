@@ -10,6 +10,11 @@ before(function () {
   Ractive.defaults.adapt = ['Ractive'];
 });
 
+// Makes tests faster
+before(function () {
+  adapt.maxKeyLength = 64;
+});
+
 /*
  * simple cases
  */

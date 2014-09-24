@@ -16,6 +16,7 @@
   };
 
   Adaptor.fireWrapEvents = true;
+  Adaptor.maxKeyLength = 2048;
 
   function isRactive (obj) {
     return obj instanceof Ractive;
@@ -34,7 +35,7 @@
 
     function setup () {
       // keypath will look like 'child.sub.parent.child.sub.parent' ad nauseum
-      if (keypath.length > 1024) {
+      if (keypath.length > Adaptor.maxKeyLength) {
         throw new Error("Keypath too long (possible circular dependency)");
       }
 
