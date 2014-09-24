@@ -93,11 +93,16 @@ describe('ractive-ractive', function () {
       expect(child.toHTML()).eql('value=2');
     });
 
-    it('handles reset', function () {
+    it('handles being reset to an object', function () {
       parent.set('child', child);
       parent.set('child', { enabled: 300 });
 
       expect(child.get('enabled')).eql(300);
+    });
+
+    it('handles being reset to undefined', function () {
+      parent.set('child', child);
+      parent.set('child', undefined);
     });
   });
 
@@ -129,6 +134,14 @@ describe('ractive-ractive', function () {
       expect(subchild.get('enabled')).eql(20);
       expect(child.get('subchild.enabled')).eql(20);
       expect(parent.get('child.subchild.enabled')).eql(20);
+    });
+
+    it('handles teardown properly', function () {
+      parent.set('child.subchild.enabled', 20);
+      child.set('subchild', undefined);
+
+      expect(parent.get('child.subchild.enabled')).be.undefined;
+      expect(child.get('subchild.enabled')).be.undefined;
     });
   });
 
