@@ -277,8 +277,14 @@ describe('computed properties', function () {
     user = new Ractive({
       data: { first: 'Jon', last: 'Snow' },
       computed: {
-        full: function () {
-          return [this.get('first'), this.get('last')].join(' ');
+        full: {
+          get: function () {
+            return [this.get('first'), this.get('last')].join(' ');
+          },
+          set: function (val) {
+            var parts = val.split(' ');
+            this.set({ first: parts[0], last: parts[1] });
+          }
         }
       }
     });
@@ -313,5 +319,43 @@ describe('computed properties', function () {
     parent.set('user', user);
     parent.set('user.last', 'Stewart');
     expect(parent.get('user.full')).eql('Jon Stewart');
+  });
+
+  describe('setters', function () {
+    beforeEach(function () {
+      parent.set('user', user);
+      parent.set('user.full', 'Arya Stark');
+    });
+
+    it('works when accessed via parent', function () {
+      expect(parent.get('user.first')).eql('Arya');
+      expect(parent.get('user.last')).eql('Stark');
+      expect(parent.get('user.full')).eql('Arya Stark');
+    });
+
+    it('works when accessed via child', function () {
+      expect(user.get('first')).eql('Arya');
+      expect(user.get('last')).eql('Stark');
+      expect(user.get('full')).eql('Arya Stark');
+    });
+  });
+
+  describe('setters, redux', function () {
+    beforeEach(function () {
+      parent.set('user', user);
+      user.set('full', 'Arya Stark');
+    });
+
+    it('works when accessed via parent', function () {
+      expect(parent.get('user.first')).eql('Arya');
+      expect(parent.get('user.last')).eql('Stark');
+      expect(parent.get('user.full')).eql('Arya Stark');
+    });
+
+    it('works when accessed via child', function () {
+      expect(user.get('first')).eql('Arya');
+      expect(user.get('last')).eql('Stark');
+      expect(user.get('full')).eql('Arya Stark');
+    });
   });
 });
