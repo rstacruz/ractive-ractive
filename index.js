@@ -10,7 +10,6 @@
 
 }(this, function (Ractive) {
 
-
   Ractive.adaptors.Ractive = {
     filter: isRactive,
     wrap: wrap
@@ -33,25 +32,20 @@
 
     function setup () {
       // If this key has been wrapped before, don't rewrap it.
-      // Usually happens on deeply-nested values.
+      // This can happen on deeply-nested values, and .reset() for some reason.
       if (parent._ractiveWraps && parent._ractiveWraps[keypath]) {
         skipped = true;
         return;
       }
 
-      // Register.
+      // Let future wrappers know what we have wrapped Ractive instances.
       if (!parent._ractiveWraps) parent._ractiveWraps = {};
       parent._ractiveWraps[keypath] = child;
 
       // If the child has its own Ractive instances, recurse upwards.
-      if (child._ractiveWraps) {
-        for (var key in child._ractiveWraps) {
-          if (child._ractiveWraps.hasOwnProperty(key)) {
-            var subchild = child._ractiveWraps[key];
-            parent.set(keypath+'.'+key, subchild);
-          }
-        }
-      }
+      // This will do `parent.set('child.grandchild', instance)` so that
+      // the `parent` can listen to the grandchild.
+      parent.set(prefixer(get()));
 
       child.on('change', observer);
     }
@@ -89,4 +83,5 @@
       }
     }
   }
+
 }));
