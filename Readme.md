@@ -3,6 +3,8 @@
 Experimental ractive adaptor for ractive objects. This makes it possible to use 
 template-less Ractive objects as models.
 
+*Find more Ractive.js plugins at [docs.ractivejs.org/latest/plugins](http://docs.ractivejs.org/latest/plugins)*
+
 ```js
 Ractive.defaults.adapt = ['Ractive'];
 
