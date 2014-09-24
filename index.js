@@ -81,18 +81,16 @@
     /*
      * Initializes the adaptor. Performs a few tricks:
      *
-     * 1. If the child has its own Ractive instances, recurse upwards. This
-     *    will do `parent.set('child.grandchild', instance)` so that the
-     *    `parent` can listen to the grandchild.
-     *
-     * 2. Listen for changes on the `child` to propagate via `parent.set()`.
+     * [1] If the child has its own Ractive instances, recurse upwards. This
+     * will do `parent.set('child.grandchild', instance)` so that the
+     * `parent` can listen to the grandchild.
      */
 
     function setup () {
       checkForRecursion();
       markAsWrapped();
-      parent.set(prefixer(get()));  // [1]
-      child.on('change', observer); // [2]
+      parent.set(prefixer(get())); // [1]
+      child.on('change', onChange);
 
       if (Adaptor.fireWrapEvents) {
         child.fire('wrap', parent, keypath);
@@ -110,7 +108,13 @@
       }
     }
 
-    function observer (updates) {
+    /*
+     * Propagate changes from child to parent.
+     * We well break it apart into key/vals and set those individually because
+     * some values may be locked.
+     */
+
+    function onChange (updates) {
       each(updates, function (value, key) {
         lock(child._guid + key, function () {
           parent.set(keypath + '.' + key, value);
