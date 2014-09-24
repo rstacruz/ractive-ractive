@@ -51,7 +51,7 @@
    * parent, and so on.
    */
 
-  var locked = {};
+  var locked = Adaptor.locked = {};
 
   function lock (key, fn) {
     if (locked[key]) return;
@@ -59,7 +59,7 @@
       locked[key] = true;
       return fn();
     } finally {
-      locked[key] = false;
+      delete locked[key];
     }
   }
 

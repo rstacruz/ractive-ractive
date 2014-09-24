@@ -359,3 +359,7 @@ describe('computed properties', function () {
     });
   });
 });
+
+afterEach(function expectLocksReleased() {
+  expect(Object.keys(adapt.locked)).length(0);
+});
