@@ -83,7 +83,7 @@ require('ractive-ractive')
 
 ## Credits
 
-Hat tip to the Ractive adaptor from @Rich-Harris.
+Hat tip to the original Ractive adaptor from @Rich-Harris.
 ([src](https://github.com/Rich-Harris/Ractive-plugins/blob/master/adaptors/Ractive.js))
 
 ## Thanks
