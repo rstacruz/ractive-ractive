@@ -109,11 +109,19 @@ describe('simple', function () {
  * deep nesting
  */
 
-describe('deeply-nested cases', function () {
+describe('using with deeply-nested cases', function () {
   beforeEach(function () {
     subchild = new Ractive({ data: { name: "subchild" }});
     child    = new Ractive({ data: { name: "child" }});
     parent   = new Ractive({ data: { name: "parent" }});
+  });
+
+  it('catches circular dependencies', function () {
+    expect(function () {
+      parent.set('child', child);
+      child.set('subchild', subchild);
+      subchild.set('parent', parent);
+    }).throw(/circular/);
   });
 
   describe('organized linearly', function () {

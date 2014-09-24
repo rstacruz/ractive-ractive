@@ -31,6 +31,11 @@
     };
 
     function setup () {
+      // keypath will look like 'child.sub.parent.child.sub.parent' ad nauseum
+      if (keypath.length > 1024) {
+        throw new Error("Keypath too long (possible circular dependency)");
+      }
+
       // If this key has been wrapped before, don't rewrap it.
       // This can happen on deeply-nested values, and .reset() for some reason.
       if (parent._ractiveWraps && parent._ractiveWraps[keypath]) {
