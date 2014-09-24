@@ -8,6 +8,9 @@
   },
   "author": "Rico Sta. Cruz <hi@ricostacruz.com>",
   "license": "MIT",
+  "peerDependencies": {
+    "ractive": "*"
+  },
   "devDependencies": {
     "chai": "^1.9.1",
     "mocha": "^1.21.4",
