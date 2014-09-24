@@ -124,19 +124,21 @@
      */
 
     function get () {
+      // Optimization: if there are no computed properties, returning all
+      // non-computed data should suffice.
+      if (!child.computed) return child.get();
+
       var re = {};
       
       each(child.get(), function (val, key) {
         re[key] = val;
       });
 
-      if (child.computed) {
-        var keys = Object.keys(child.computed);
-        for (var i = 0, len = keys.length; i < len; i++) {
-          var key = keys[i];
-          if (typeof re[key] === 'undefined')
-            re[key] = child.get(key);
-        }
+      var keys = Object.keys(child.computed);
+      for (var i = 0, len = keys.length; i < len; i++) {
+        var key = keys[i];
+        if (typeof re[key] === 'undefined')
+          re[key] = child.get(key);
       }
 
       return re;
