@@ -293,10 +293,23 @@ describe('computed values', function () {
     expect(parent.get('user.full')).eql('Jon Snow');
   });
 
-  /* dont know why this doesn't work. */
-  it.skip('propagates when something changes', function () {
+  it('propagates when something changes by proxy', function () {
     parent.set('user', user);
-    user.set('last', 'Stewart');
+    parent.set('user.last', 'Stewart');
+    expect(user.get('full')).eql('Jon Stewart');
+  });
+
+  it('propagates when something changes by proxy, and checked on parent', function () {
+    parent.set('user', user);
+    parent.set('user.last', 'Stewart');
     expect(parent.get('user.full')).eql('Jon Stewart');
   });
+
+  /* dont know why this doesn't work. */
+  it('propagates when something changes', function () {
+    parent.set('user', user);
+    parent.set('user.last', 'Stewart');
+    expect(parent.get('user.full')).eql('Jon Stewart');
+  });
+
 });

@@ -111,8 +111,10 @@
     }
 
     function observer (updates) {
-      lock(parent._guid, function () {
-        parent.set(prefixer(updates));
+      each(updates, function (value, key) {
+        lock(child._guid + key, function () {
+          parent.set(keypath + '.' + key, value);
+        });
       });
     }
 
@@ -122,7 +124,11 @@
      */
 
     function get () {
-      var re = child.get();
+      var re = {};
+      
+      each(child.get(), function (val, key) {
+        re[key] = val;
+      });
 
       if (child.computed) {
         var keys = Object.keys(child.computed);
@@ -137,7 +143,7 @@
     }
 
     function set (key, value) {
-      lock(parent._guid, function () {
+      lock(child._guid + key, function () {
         child.set(key, value);
       });
     }
@@ -175,6 +181,16 @@
     function markAsWrapped () {
       if (!parent._ractiveWraps) parent._ractiveWraps = {};
       parent._ractiveWraps[keypath] = child;
+    }
+  }
+
+  /*
+   * Cross-browser forEach helper
+   */
+
+  function each (obj, fn) {
+    for (var key in obj) {
+      if (obj.hasOwnProperty(key)) fn(obj[key], key);
     }
   }
 
