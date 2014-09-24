@@ -100,7 +100,7 @@
 
     function teardown () {
       delete parent._ractiveWraps[keypath];
-      child.off('change', observer);
+      child.off('change', onChange);
 
       if (Adaptor.fireWrapEvents) {
         child.fire('unwrap', parent, keypath);
