@@ -1,6 +1,8 @@
-## v0.3.0
+## v0.3.0 - September 24, 2014
 
 * Wrap events.
+* Cleanup for code readability and speed.
+* Internal: make `maxKeyLength` configurable.
 
 ## v0.2.0 - September 24, 2014
 
