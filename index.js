@@ -53,6 +53,16 @@
 
   var locked;
 
+  function lock (fn) {
+    if (locked) return;
+    try {
+      locked = true;
+      return fn();
+    } finally {
+      locked = false;
+    }
+  }
+
   /*
    * Returns a wrapped Adaptor for Ractive.
    * See: http://docs.ractivejs.org/latest/writing-adaptor-plugins
@@ -101,10 +111,9 @@
     }
 
     function observer (updates) {
-      if (locked) return;
-      locked = true;
-      parent.set(prefixer(updates));
-      locked = false;
+      lock(function () {
+        parent.set(prefixer(updates));
+      });
     }
 
     function get () {
@@ -112,10 +121,9 @@
     }
 
     function set (key, value) {
-      if (locked) return;
-      locked = true;
-      child.set(key, value);
-      locked = false;
+      lock(function () {
+        child.set(key, value);
+      });
     }
 
     /*

@@ -28,18 +28,18 @@ describe('simple', function () {
   });
 
   it(".get picks up the child's value", function () {
-    child.set('enabled', 1);
+    child.set('one', 1);
     parent.set('child', child);
 
-    expect(parent.get('child.enabled')).eql(1);
+    expect(parent.get('child.one')).eql(1);
   });
 
   it('propagates changes from child to parent', function () {
-    child.set('enabled', 1);
+    child.set('two', 1);
     parent.set('child', child);
-    child.set('enabled', 2);
+    child.set('two', 2);
 
-    expect(parent.get('child.enabled')).eql(2);
+    expect(parent.get('child.two')).eql(2);
   });
 
   it('fires the "wrap" event', function (next) {
@@ -66,18 +66,18 @@ describe('simple', function () {
     var runs = 0;
     parent.set('child', child);
 
-    parent.observe('child.enabled', function (val) {
+    parent.observe('child.three', function (val) {
       runs++;
       if (runs === 1) {
         expect(val).be.undefined;
       }
       else if (runs === 2) {
-        expect(val).eql(2);
+        expect(val).eql(3);
         next();
       }
     });
 
-    child.set('enabled', 2);
+    child.set('three', 3);
   });
 
   it('updates the parent HTML when the child updates', function () {
@@ -192,7 +192,6 @@ describe('using with deeply-nested cases', function () {
       expect(parent.get('child.subchild.enabled')).eql(200);
     });
 
-    /* NB: this case doesn't work yet. child.set() doesn't get called. */
     it('works downwards', function () {
       parent.set('child.subchild.enabled', 19);
 
@@ -229,5 +228,42 @@ describe('filter', function () {
   it('works for negatives: array', function () {
     var obj = [];
     expect(adapt.filter(obj)).eql(false);
+  });
+});
+
+/*
+ * using set on observe shouldn't interfere with locks
+ */
+
+describe('set on observe', function () {
+  beforeEach(function () {
+    parent = new Ractive();
+    child  = new Ractive();
+  });
+
+  it('works when observed from child', function () {
+    parent.set('child', child);
+
+    child.observe('banana', function (val) {
+      parent.set('apple', val);
+    });
+
+    child.set('banana', 'pancake');
+
+    expect(child.get('banana')).eql('pancake');
+    expect(parent.get('apple')).eql('pancake');
+  });
+
+  it('works when observed from parent', function () {
+    parent.set('child', child);
+
+    parent.observe('child.banana', function (val) {
+      parent.set('apple', val);
+    });
+
+    child.set('banana', 'pancake');
+
+    expect(child.get('banana')).eql('pancake');
+    expect(parent.get('apple')).eql('pancake');
   });
 });
