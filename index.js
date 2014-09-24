@@ -45,12 +45,20 @@
   }
 
   /*
+   * Global write lock.
+   * This prevents infinite loops from happening where a parent will set a
+   * value on the child, and the child will attempt to write back to the
+   * parent, and so on.
+   */
+
+  var locked;
+
+  /*
    * Returns a wrapped Adaptor for Ractive.
    * See: http://docs.ractivejs.org/latest/writing-adaptor-plugins
    */
 
   function wrap (parent, child, keypath, prefixer) {
-    var pause;
     setup();
 
     return {
@@ -60,17 +68,21 @@
       teardown: teardown
     };
 
+    /*
+     * Initializes the adaptor. Performs a few tricks:
+     *
+     * 1. If the child has its own Ractive instances, recurse upwards. This
+     *    will do `parent.set('child.grandchild', instance)` so that the
+     *    `parent` can listen to the grandchild.
+     *
+     * 2. Listen for changes on the `child` to propagate via `parent.set()`.
+     */
+
     function setup () {
       checkForRecursion();
       markAsWrapped();
-
-      // If the child has its own Ractive instances, recurse upwards.
-      // This will do `parent.set('child.grandchild', instance)` so that
-      // the `parent` can listen to the grandchild.
-      parent.set(prefixer(get()));
-
-      // Propagate child changes to parent.
-      child.on('change', observer);
+      parent.set(prefixer(get()));  // [1]
+      child.on('change', observer); // [2]
 
       if (Adaptor.fireWrapEvents) {
         child.fire('wrap', parent, keypath);
@@ -89,10 +101,10 @@
     }
 
     function observer (updates) {
-      if (pause) return;
-      pause = true;
+      if (locked) return;
+      locked = true;
       parent.set(prefixer(updates));
-      pause = false;
+      locked = false;
     }
 
     function get () {
@@ -100,10 +112,10 @@
     }
 
     function set (key, value) {
-      if (pause) return;
-      pause = true;
+      if (locked) return;
+      locked = true;
       child.set(key, value);
-      pause = false;
+      locked = false;
     }
 
     /*
