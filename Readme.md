@@ -5,6 +5,8 @@ template-less Ractive objects as models.
 
 *Find more Ractive.js plugins at [docs.ractivejs.org/latest/plugins](http://docs.ractivejs.org/latest/plugins)*
 
+[![Status](http://img.shields.io/travis/rstacruz/ractive-ractive/master.svg?style=flat)](https://travis-ci.org/rstacruz/ractive-ractive "See test builds")
+
 ```js
 Ractive.defaults.adapt = ['Ractive'];
 
@@ -34,7 +36,13 @@ work?)
 
 ### Usage
 
-No need to consume the return value.
+ractive-ractive is available via npm.
+
+    $ npm install --save ractive-ractive
+
+[![npm version](http://img.shields.io/npm/v/ractive-ractive.svg?style=flat)](https://npmjs.org/package/ractive-ractive "View this project on npm")
+
+Require the module to use. No need to consume the return value.
 
 ```js
 require('ractive-ractive')
