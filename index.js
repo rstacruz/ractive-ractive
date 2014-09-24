@@ -11,19 +11,35 @@
 }(this, function (Ractive) {
 
   var Adaptor = Ractive.adaptors.Ractive = {
-    filter: isRactive,
+    filter: filter,
     wrap: wrap
   };
+
+  /*
+   * Advanced options:
+   * You can adjust these settings via `Ractive.adaptors.Ractive.maxKeyLength`
+   * and so on. There's usually no need to do that, but it helps in tests.
+   */
 
   Adaptor.fireWrapEvents = true;
   Adaptor.maxKeyLength = 2048;
 
-  function isRactive (obj) {
-    return obj instanceof Ractive;
+  function filter (child, keypath, parent) {
+    if (!(child instanceof Ractive))
+      return false;
+
+    // If this key has been wrapped before, don't rewrap it. This can happen on
+    // deeply-nested values, and .reset() for some reason.
+    if (parent &&
+        parent._ractiveWraps &&
+        parent._ractiveWraps[keypath])
+      return false;
+
+    return true;
   }
 
   function wrap (parent, child, keypath, prefixer) {
-    var pause, skipped;
+    var pause;
     setup();
 
     return {
@@ -34,17 +50,7 @@
     };
 
     function setup () {
-      // keypath will look like 'child.sub.parent.child.sub.parent' ad nauseum
-      if (keypath.length > Adaptor.maxKeyLength) {
-        throw new Error("Keypath too long (possible circular dependency)");
-      }
-
-      // If this key has been wrapped before, don't rewrap it.
-      // This can happen on deeply-nested values, and .reset() for some reason.
-      if (parent._ractiveWraps && parent._ractiveWraps[keypath]) {
-        skipped = true;
-        return;
-      }
+      checkKeypath();
 
       // Let future wrappers know what we have wrapped Ractive instances.
       if (!parent._ractiveWraps) parent._ractiveWraps = {};
@@ -66,8 +72,6 @@
     }
 
     function teardown () {
-      if (skipped) return;
-
       delete parent._ractiveWraps[keypath];
       child.off('change', observer);
 
@@ -106,6 +110,12 @@
       } else {
         return false;
       }
+    }
+
+    // keypath will look like 'child.sub.parent.child.sub.parent' ad nauseum.
+    function checkKeypath () {
+      if (keypath && keypath.length > Adaptor.maxKeyLength)
+        throw new Error("Keypath too long (possible circular dependency)");
     }
   }
 
