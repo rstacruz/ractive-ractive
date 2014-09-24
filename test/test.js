@@ -20,7 +20,7 @@ before(function () {
  */
 
 describe('simple', function () {
-  this.timeout(80);
+  this.timeout(250);
 
   beforeEach(function () {
     child  = new Ractive();
