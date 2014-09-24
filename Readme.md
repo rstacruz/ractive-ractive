@@ -41,6 +41,7 @@ Everything you'd expect to work will work.
 However, these things are not supported, but may be in the future:
 
  * circular dependencies (an error will be thrown)
+ * computed properties (kinda wonky)
  * events (see [ractive#1249])
 
 ## Wrap events

@@ -51,15 +51,15 @@
    * parent, and so on.
    */
 
-  var locked;
+  var locked = {};
 
-  function lock (fn) {
-    if (locked) return;
+  function lock (key, fn) {
+    if (locked[key]) return;
     try {
-      locked = true;
+      locked[key] = true;
       return fn();
     } finally {
-      locked = false;
+      locked[key] = false;
     }
   }
 
@@ -111,17 +111,33 @@
     }
 
     function observer (updates) {
-      lock(function () {
+      lock(parent._guid, function () {
         parent.set(prefixer(updates));
       });
     }
 
+    /*
+     * Returns all attributes of the child, including computed properties.
+     * See: https://github.com/ractivejs/ractive/issues/1250
+     */
+
     function get () {
-      return child.get();
+      var re = child.get();
+
+      if (child.computed) {
+        var keys = Object.keys(child.computed);
+        for (var i = 0, len = keys.length; i < len; i++) {
+          var key = keys[i];
+          if (typeof re[key] === 'undefined')
+            re[key] = child.get(key);
+        }
+      }
+
+      return re;
     }
 
     function set (key, value) {
-      lock(function () {
+      lock(parent._guid, function () {
         child.set(key, value);
       });
     }

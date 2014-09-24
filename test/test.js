@@ -2,7 +2,7 @@
 var expect = require('chai').expect;
 var Ractive = require('ractive');
 
-var child, parent, adapt, subchild;
+var child, parent, adapt, subchild, user;
 
 before(function () {
   require('../index');
@@ -265,5 +265,38 @@ describe('set on observe', function () {
 
     expect(child.get('banana')).eql('pancake');
     expect(parent.get('apple')).eql('pancake');
+  });
+});
+
+describe('computed values', function () {
+  beforeEach(function () {
+    user = new Ractive({
+      data: { first: 'Jon', last: 'Snow' },
+      computed: {
+        full: function () {
+          return [this.get('first'), this.get('last')].join(' ');
+        }
+      }
+    });
+  });
+
+  beforeEach(function () {
+    parent = new Ractive();
+  });
+
+  it('sanity check', function () {
+    expect(user.get('full')).eql('Jon Snow');
+  });
+
+  it('works on the first run', function () {
+    parent.set('user', user);
+    expect(parent.get('user.full')).eql('Jon Snow');
+  });
+
+  /* dont know why this doesn't work. */
+  it.skip('propagates when something changes', function () {
+    parent.set('user', user);
+    user.set('last', 'Stewart');
+    expect(parent.get('user.full')).eql('Jon Stewart');
   });
 });
