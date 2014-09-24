@@ -268,7 +268,11 @@ describe('set on observe', function () {
   });
 });
 
-describe('computed values', function () {
+/*
+ * computed properties
+ */
+
+describe('computed properties', function () {
   beforeEach(function () {
     user = new Ractive({
       data: { first: 'Jon', last: 'Snow' },
@@ -305,11 +309,9 @@ describe('computed values', function () {
     expect(parent.get('user.full')).eql('Jon Stewart');
   });
 
-  /* dont know why this doesn't work. */
   it('propagates when something changes', function () {
     parent.set('user', user);
     parent.set('user.last', 'Stewart');
     expect(parent.get('user.full')).eql('Jon Stewart');
   });
-
 });

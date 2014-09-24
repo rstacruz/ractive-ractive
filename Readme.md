@@ -37,11 +37,11 @@ Everything you'd expect to work will work.
  * bi-directional propagation
  * observers
  * templates
+ * computed properties
 
 However, these things are not supported, but may be in the future:
 
  * circular dependencies (an error will be thrown)
- * computed properties
  * events (see [ractive#1249])
 
 ## Wrap events

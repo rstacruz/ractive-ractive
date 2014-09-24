@@ -1,3 +1,7 @@
+## v0.4.0 - September 24, 2014
+
+* Support computed properties.
+
 ## v0.3.2 - September 24, 2014
 
 * Ensure write-locks get unlocked even when execptions are thrown.
