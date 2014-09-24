@@ -105,19 +105,30 @@ describe('ractive-ractive', function () {
    * deep nesting
    */
 
-  describe('nested cases', function () {
+  describe('deeply-nested cases', function () {
     beforeEach(function () {
       subchild = new Ractive();
       child    = new Ractive();
       parent   = new Ractive();
+
+      parent.set('child', child);
+      child.set('subchild', subchild);
     });
 
-    it('works', function () {
-      parent.set('child', child);
-      child.set('child', subchild);
+    it('works upwards', function () {
+      subchild.set('enabled', 20);
+      expect(parent.get('child.subchild.enabled')).eql(20);
+
       subchild.set('enabled', 200);
-      
-      expect(parent.get('child.child.enabled')).eql(200);
+      expect(parent.get('child.subchild.enabled')).eql(200);
+    });
+
+    it('works downwards', function () {
+      parent.set('child.subchild.enabled', 20);
+
+      expect(subchild.get('enabled')).eql(20);
+      expect(child.get('subchild.enabled')).eql(20);
+      expect(parent.get('child.subchild.enabled')).eql(20);
     });
   });
 
