@@ -43,6 +43,30 @@ However, these things are not supported, but may be in the future:
  * circular dependencies (an error will be thrown)
  * events (see [ractive#1249])
 
+### Wrap events
+
+It will trigger a few events:
+
+ * `wrap` - called when the instance is set as an attribute of another instance
+ * `unwrap` - called when the instance has been unset from its parent
+ * `wrapchild` - called when the instance gets an Ractive attribute set
+ * `unwrapchild` - called when the instance gets an Ractive attribute unset
+
+To illustrate:
+
+```js
+parent = new Ractive();
+child  = new Ractive();
+
+parent.set('x', child);
+// triggers `wrap(parent, 'x')` on child
+// triggers `wrapchild(child, 'x')` on parent
+
+parent.set('x', undefined);
+// triggers `unwrap(parent, 'x')` on child
+// triggers `unwrapchild(child, 'x')` on parent
+```
+
 ### Usage
 
 ractive-ractive is available via npm.

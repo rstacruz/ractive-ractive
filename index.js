@@ -10,10 +10,12 @@
 
 }(this, function (Ractive) {
 
-  Ractive.adaptors.Ractive = {
+  var Adaptor = Ractive.adaptors.Ractive = {
     filter: isRactive,
     wrap: wrap
   };
+
+  Adaptor.fireWrapEvents = true;
 
   function isRactive (obj) {
     return obj instanceof Ractive;
@@ -52,7 +54,14 @@
       // the `parent` can listen to the grandchild.
       parent.set(prefixer(get()));
 
+      // Propagate child changes to parent.
       child.on('change', observer);
+
+      // Fire wrap events
+      if (Adaptor.fireWrapEvents) {
+        child.fire('wrap', parent, keypath);
+        parent.fire('wrapchild', child, keypath);
+      }
     }
 
     function teardown () {
@@ -60,6 +69,12 @@
 
       delete parent._ractiveWraps[keypath];
       child.off('change', observer);
+
+      // Fire wrap events
+      if (Adaptor.fireWrapEvents) {
+        child.fire('unwrap', parent, keypath);
+        parent.fire('unwrapchild', child, keypath);
+      }
     }
 
     function observer (updates) {
@@ -81,6 +96,10 @@
     }
 
     function reset (object) {
+      // Allow setting values by passing a POJO to .set(), for instance,
+      // `.set('child', { ... })`. If anything else is passed onto .set()
+      // (like another Ractive instance, or another adaptor'able), destroy
+      // this wrapper.
       if (object && object.constructor === Object) {
         child.set(object);
       } else {

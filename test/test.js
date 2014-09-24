@@ -15,6 +15,8 @@ before(function () {
  */
 
 describe('simple', function () {
+  this.timeout(20);
+
   beforeEach(function () {
     child  = new Ractive();
     parent = new Ractive();
@@ -35,10 +37,26 @@ describe('simple', function () {
     expect(parent.get('child.enabled')).eql(2);
   });
 
-  /*
-   * ensure that you can observe changes in the child via the parent.
-   */
+  it('fires the "wrap" event', function (next) {
+    child.on('wrap', function (_parent, key) {
+      expect(key).eql('child');
+      next();
+    });
 
+    parent.set('child', child);
+  });
+
+  it('fires the "unwrap" event after reset', function (next) {
+    child.on('unwrap', function (_parent, key) {
+      expect(key).eql('child');
+      next();
+    });
+
+    parent.set('child', child);
+    parent.set('child', undefined);
+  });
+
+  // ensure that you can observe changes in the child via the parent.
   it('can observe changes of the child', function (next) {
     var runs = 0;
     parent.set('child', child);

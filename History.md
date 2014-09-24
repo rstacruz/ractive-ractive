@@ -1,3 +1,7 @@
+## v0.3.0
+
+* Wrap events.
+
 ## v0.2.0 - September 24, 2014
 
 * Throw errors on a circular dependency.
