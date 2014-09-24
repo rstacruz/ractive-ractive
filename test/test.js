@@ -112,36 +112,72 @@ describe('ractive-ractive', function () {
 
   describe('deeply-nested cases', function () {
     beforeEach(function () {
-      subchild = new Ractive();
-      child    = new Ractive();
-      parent   = new Ractive();
-
-      parent.set('child', child);
-      child.set('subchild', subchild);
+      subchild = new Ractive({ data: { name: "subchild" }});
+      child    = new Ractive({ data: { name: "child" }});
+      parent   = new Ractive({ data: { name: "parent" }});
     });
 
-    it('works upwards', function () {
-      subchild.set('enabled', 20);
-      expect(parent.get('child.subchild.enabled')).eql(20);
+    describe('organized linearly', function () {
+      beforeEach(function () {
+        parent.set('child', child);
+        child.set('subchild', subchild);
+      });
 
-      subchild.set('enabled', 200);
-      expect(parent.get('child.subchild.enabled')).eql(200);
+      it('works upwards', function () {
+        subchild.set('enabled', 20);
+        expect(parent.get('child.subchild.enabled')).eql(20);
+
+        subchild.set('enabled', 200);
+        expect(parent.get('child.subchild.enabled')).eql(200);
+      });
+
+      it('works downwards', function () {
+        parent.set('child.subchild.enabled', 20);
+
+        expect(subchild.get('enabled')).eql(20);
+        expect(child.get('subchild.enabled')).eql(20);
+        expect(parent.get('child.subchild.enabled')).eql(20);
+      });
+
+      it('handles teardown properly', function () {
+        parent.set('child.subchild.enabled', 20);
+        child.set('subchild', undefined);
+
+        expect(parent.get('child.subchild.enabled')).be.undefined;
+        expect(child.get('subchild.enabled')).be.undefined;
+      });
     });
 
-    it('works downwards', function () {
-      parent.set('child.subchild.enabled', 20);
+    describe('organized non-linearly', function () {
+      beforeEach(function () {
+        child.set('subchild', subchild);
+        parent.set('child', child);
+      });
 
-      expect(subchild.get('enabled')).eql(20);
-      expect(child.get('subchild.enabled')).eql(20);
-      expect(parent.get('child.subchild.enabled')).eql(20);
-    });
+      it('works upwards', function () {
+        subchild.set('enabled', 20);
+        expect(parent.get('child.subchild.enabled')).eql(20);
 
-    it('handles teardown properly', function () {
-      parent.set('child.subchild.enabled', 20);
-      child.set('subchild', undefined);
+        subchild.set('enabled', 200);
+        expect(parent.get('child.subchild.enabled')).eql(200);
+      });
 
-      expect(parent.get('child.subchild.enabled')).be.undefined;
-      expect(child.get('subchild.enabled')).be.undefined;
+      /* NB: this case doesn't work yet. child.set() doesn't get called. */
+      it('works downwards', function () {
+        parent.set('child.subchild.enabled', 19);
+
+        expect(subchild.get('enabled')).eql(19);
+        expect(child.get('subchild.enabled')).eql(19);
+        expect(parent.get('child.subchild.enabled')).eql(19);
+      });
+
+      it('handles teardown properly', function () {
+        parent.set('child.subchild.enabled', 20);
+        child.set('subchild', undefined);
+
+        expect(parent.get('child.subchild.enabled')).be.undefined;
+        expect(child.get('subchild.enabled')).be.undefined;
+      });
     });
   });
 

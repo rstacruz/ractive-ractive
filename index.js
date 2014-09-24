@@ -21,7 +21,7 @@
   }
 
   function wrap (parent, child, keypath, prefixer) {
-    var pause;
+    var pause, skipped;
     setup();
 
     return {
@@ -32,7 +32,35 @@
     };
 
     function setup () {
+      // If this key has been wrapped before, don't rewrap it.
+      // Usually happens on deeply-nested values.
+      if (parent._ractiveWraps && parent._ractiveWraps[keypath]) {
+        skipped = true;
+        return;
+      }
+
+      // Register.
+      if (!parent._ractiveWraps) parent._ractiveWraps = {};
+      parent._ractiveWraps[keypath] = child;
+
+      // If the child has its own Ractive instances, recurse upwards.
+      if (child._ractiveWraps) {
+        for (var key in child._ractiveWraps) {
+          if (child._ractiveWraps.hasOwnProperty(key)) {
+            var subchild = child._ractiveWraps[key];
+            parent.set(keypath+'.'+key, subchild);
+          }
+        }
+      }
+
       child.on('change', observer);
+    }
+
+    function teardown () {
+      if (skipped) return;
+
+      delete parent._ractiveWraps[keypath];
+      child.off('change', observer);
     }
 
     function observer (updates) {
@@ -46,10 +74,10 @@
       return child.get();
     }
 
-    function set (keypath, value) {
+    function set (key, value) {
       if (pause) return;
       pause = true;
-      child.set(keypath, value);
+      child.set(key, value);
       pause = false;
     }
 
@@ -59,10 +87,6 @@
       } else {
         return false;
       }
-    }
-
-    function teardown () {
-      child.off('change', observer);
     }
   }
 }));
