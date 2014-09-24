@@ -26,10 +26,31 @@ parent.set('user.name', 'Matt');
 user.get('name')   //=> "Matt"
 ```
 
-Everything you'd expect to work will work: observers, templates, and so on.
+Everything you'd expect to work will work: observers, templates, and so on...
+except events and circular dependencies. (but do you really expect that to
+work?)
 
-Except events.
+### Usage
 
-### License
+No need to consume the return value.
 
-MIT
+```js
+require('ractive-ractive`)
+```
+
+### Credits
+
+Hat tip to the Ractive adaptor from @Rich-Harris.
+([src](https://github.com/Rich-Harris/Ractive-plugins/blob/master/adaptors/Ractive.js))
+
+### Thanks
+
+**ractive-ractive** © 2014+, Rico Sta. Cruz. Released under the [MIT] License.<br>
+Authored and maintained by Rico Sta. Cruz with help from contributors ([list][contributors]).
+
+> [ricostacruz.com](http://ricostacruz.com) &nbsp;&middot;&nbsp;
+> GitHub [@rstacruz](https://github.com/rstacruz) &nbsp;&middot;&nbsp;
+> Twitter [@rstacruz](https://twitter.com/rstacruz)
+
+[MIT]: http://mit-license.org/
+[contributors]: http://github.com/rstacruz/ractive-ractive/contributors
