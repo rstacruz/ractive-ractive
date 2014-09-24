@@ -30,7 +30,7 @@ parent.set('user.name', 'Matt');
 user.get('name')   //=> "Matt"
 ```
 
-### Features
+## Features
 
 Everything you'd expect to work will work.
 
@@ -43,7 +43,7 @@ However, these things are not supported, but may be in the future:
  * circular dependencies (an error will be thrown)
  * events (see [ractive#1249])
 
-### Wrap events
+## Wrap events
 
 It will trigger a few events:
 
@@ -67,7 +67,7 @@ parent.set('x', undefined);
 // triggers `unwrapchild(child, 'x')` on parent
 ```
 
-### Usage
+## Usage
 
 ractive-ractive is available via npm.
 
@@ -81,12 +81,12 @@ Require the module to use. No need to consume the return value.
 require('ractive-ractive')
 ```
 
-### Credits
+## Credits
 
 Hat tip to the Ractive adaptor from @Rich-Harris.
 ([src](https://github.com/Rich-Harris/Ractive-plugins/blob/master/adaptors/Ractive.js))
 
-### Thanks
+## Thanks
 
 **ractive-ractive** © 2014+, Rico Sta. Cruz. Released under the [MIT] License.<br>
 Authored and maintained by Rico Sta. Cruz with help from contributors ([list][contributors]).
