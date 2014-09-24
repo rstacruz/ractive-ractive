@@ -20,9 +20,8 @@
     return obj instanceof Ractive;
   }
 
-  function wrap (ractive, obj, keypath, prefixer) {
+  function wrap (parent, child, keypath, prefixer) {
     var pause;
-    var data = {};
     setup();
 
     return {
@@ -33,35 +32,37 @@
     };
 
     function setup () {
-      obj.on('change', observer);
+      child.on('change', observer);
     }
 
     function observer (updates) {
       if (pause) return;
       pause = true;
-      ractive.set(prefixer(updates));
+      parent.set(prefixer(updates));
       pause = false;
     }
 
     function get () {
-      return obj.get();
+      return child.get();
     }
 
     function set (keypath, value) {
       if (pause) return;
       pause = true;
-      other.set(keypath, value);
+      child.set(keypath, value);
       pause = false;
     }
 
     function reset (object) {
-      console.log('reset');
-      // if pojo, reset, else return false
-      return false;
+      if (object.constructor === Object) {
+        child.set(object);
+      } else {
+        return false;
+      }
     }
 
     function teardown () {
-      console.log('teardown');
+      child.off('change', observer);
     }
   }
 }));

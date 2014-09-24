@@ -1,7 +1,7 @@
 {
   "name": "ractive-ractive",
   "version": "0.0.0",
-  "description": "",
+  "description": "Ractive adaptor for Ractive objects",
   "main": "index.js",
   "scripts": {
     "test": "mocha"
