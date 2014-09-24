@@ -35,7 +35,7 @@ work?)
 No need to consume the return value.
 
 ```js
-require('ractive-ractive`)
+require('ractive-ractive')
 ```
 
 ### Credits
