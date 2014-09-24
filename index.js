@@ -18,7 +18,8 @@
   /*
    * Advanced options:
    * You can adjust these settings via `Ractive.adaptors.Ractive.maxKeyLength`
-   * and so on. There's usually no need to do that, but it helps in tests.
+   * and so on. There's usually no need to do that, but it may be good for
+   * optimizing tests.
    */
 
   Adaptor.fireWrapEvents = true;
@@ -42,6 +43,11 @@
 
     return true;
   }
+
+  /*
+   * Returns a wrapped Adaptor for Ractive.
+   * See: http://docs.ractivejs.org/latest/writing-adaptor-plugins
+   */
 
   function wrap (parent, child, keypath, prefixer) {
     var pause;
