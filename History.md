@@ -1,3 +1,7 @@
+## v0.4.1 - September 24, 2014
+
+* Fix possible memory leak.
+
 ## v0.4.0 - September 24, 2014
 
 * Support computed properties.
