@@ -30,9 +30,18 @@ parent.set('user.name', 'Matt');
 user.get('name')   //=> "Matt"
 ```
 
-Everything you'd expect to work will work: observers, templates, and so on...
-except events and circular dependencies. (but do you really expect that to
-work?)
+### Features
+
+Everything you'd expect to work will work.
+
+ * bi-directional propagation
+ * observers
+ * templates
+
+However, these things are not supported, but may be in the future:
+
+ * circular dependencies (an error will be thrown)
+ * events (see [ractive#1249])
 
 ### Usage
 
@@ -64,3 +73,4 @@ Authored and maintained by Rico Sta. Cruz with help from contributors ([list][co
 
 [MIT]: http://mit-license.org/
 [contributors]: http://github.com/rstacruz/ractive-ractive/contributors
+[ractive#1249]: https://github.com/ractivejs/ractive/issues/1249 
