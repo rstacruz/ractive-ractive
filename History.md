@@ -1,3 +1,8 @@
+## v0.3.1 - September 24, 2014
+
+* Make the write lock work globally, not just per adaptor. This theoretically 
+  helps prevent some infinite loops (that I haven't found yet) from happening.
+
 ## v0.3.0 - September 24, 2014
 
 * Wrap events.
