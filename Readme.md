@@ -8,7 +8,7 @@ template-less Ractive objects as models.
 [![Status](http://img.shields.io/travis/rstacruz/ractive-ractive/master.svg?style=flat)](https://travis-ci.org/rstacruz/ractive-ractive "See test builds")
 
 ```js
-Ractive.defaults.adapt = ['Ractive'];
+Ractive.defaults.adapt.push('Ractive');
 
 parent = new Ractive();
 user   = new Ractive();
