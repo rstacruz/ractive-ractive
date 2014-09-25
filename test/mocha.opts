@@ -1,1 +1,1 @@
---require mocha-clean/filenames_first
+--require mocha-clean/brief
