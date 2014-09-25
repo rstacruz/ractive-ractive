@@ -138,12 +138,10 @@
         re[key] = val;
       });
 
-      var keys = Object.keys(child.computed);
-      for (var i = 0, len = keys.length; i < len; i++) {
-        var key = keys[i];
+      each(child.computed, function (_, key) {
         if (typeof re[key] === 'undefined')
           re[key] = child.get(key);
-      }
+      });
 
       return re;
     }
