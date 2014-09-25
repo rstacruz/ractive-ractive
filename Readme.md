@@ -7,6 +7,10 @@ template-less Ractive objects as models.
 
 [![Status](http://img.shields.io/travis/rstacruz/ractive-ractive/master.svg?style=flat)](https://travis-ci.org/rstacruz/ractive-ractive "See test builds")
 
+<br>
+
+## Example
+
 ```js
 Ractive.defaults.adapt.push('Ractive');
 
@@ -30,6 +34,8 @@ parent.set('user.name', 'Matt');
 user.get('name')   //=> "Matt"
 ```
 
+<br>
+
 ## Features
 
 Everything you'd expect to work will work.
@@ -43,6 +49,8 @@ However, these things are not supported, but may be in the future:
 
  * circular dependencies (an error will be thrown)
  * events (see [ractive#1249])
+
+<br>
 
 ## Wrap events
 
@@ -68,6 +76,8 @@ parent.set('x', undefined);
 // triggers `unwrapchild(child, 'x')` on parent
 ```
 
+<br>
+
 ## Usage
 
 ractive-ractive is available via npm.
@@ -82,10 +92,14 @@ Require the module to use. No need to consume the return value.
 require('ractive-ractive')
 ```
 
+<br>
+
 ## Credits
 
 Hat tip to the original Ractive adaptor from @Rich-Harris.
 ([src](https://github.com/Rich-Harris/Ractive-plugins/blob/master/adaptors/Ractive.js))
+
+<br>
 
 ## Thanks
 
