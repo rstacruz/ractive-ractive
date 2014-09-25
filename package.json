@@ -1,6 +1,6 @@
 {
   "name": "ractive-ractive",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "Ractive adaptor for Ractive objects",
   "main": "index.js",
   "scripts": {
