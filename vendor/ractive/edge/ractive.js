@@ -1,6 +1,6 @@
 /*
 	ractive.js v0.6.0
-	2014-10-01 - commit bdf01e09 
+	2014-10-01 - commit 4f3488f9 
 
 	http://ractivejs.org
 	http://twitter.com/RactiveJS
@@ -11987,17 +11987,13 @@
 	}();
 
 	/* virtualdom/items/Component/prototype/unrender.js */
-	var virtualdom_items_Component$unrender = function( Hook ) {
-
-		var teardownHook = new Hook( 'teardown' );
-		return function Component$unrender( shouldDestroy ) {
-			this.shouldDestroy = shouldDestroy;
-			this.instance.unrender();
-			if ( shouldDestroy ) {
-				teardownHook.fire( this.instance );
-			}
-		};
-	}( Ractive$shared_hooks_Hook );
+	var virtualdom_items_Component$unrender = function Component$unrender( shouldDestroy ) {
+		this.shouldDestroy = shouldDestroy;
+		this.instance.unrender();
+		if ( shouldDestroy ) {
+			this.instance.teardown();
+		}
+	};
 
 	/* virtualdom/items/Component/_Component.js */
 	var Component = function( detach, find, findAll, findAllComponents, findComponent, findNextNode, firstNode, init, rebind, render, toString, unbind, unrender ) {
@@ -12949,7 +12945,7 @@
 	}( viewmodel$get_magicAdaptor, viewmodel$get_arrayAdaptor );
 
 	/* viewmodel/prototype/adapt.js */
-	var viewmodel$adapt = function( config, arrayAdaptor, magicAdaptor, magicArrayAdaptor ) {
+	var viewmodel$adapt = function( config, arrayAdaptor, log, magicAdaptor, magicArrayAdaptor ) {
 
 		var __export;
 		var prefixers = {};
@@ -12965,7 +12961,15 @@
 				if ( typeof adaptor === 'string' ) {
 					var found = config.registries.adaptors.find( ractive, adaptor );
 					if ( !found ) {
-						throw new Error( 'Missing adaptor "' + adaptor + '"' );
+						// will throw. "return" for safety, if we downgrade :)
+						return log.critical( {
+							debug: ractive.debug,
+							message: 'missingPlugin',
+							args: {
+								plugin: 'adaptor',
+								name: adaptor
+							}
+						} );
 					}
 					adaptor = ractive.adapt[ i ] = found;
 				}
@@ -13022,7 +13026,7 @@
 			return prefixers[ rootKeypath ];
 		}
 		return __export;
-	}( config, viewmodel$get_arrayAdaptor, viewmodel$get_magicAdaptor, viewmodel$get_magicArrayAdaptor );
+	}( config, viewmodel$get_arrayAdaptor, log, viewmodel$get_magicAdaptor, viewmodel$get_magicArrayAdaptor );
 
 	/* viewmodel/helpers/getUpstreamChanges.js */
 	var getUpstreamChanges = function getUpstreamChanges( changes ) {
@@ -13294,6 +13298,9 @@
 			if ( wrapper = this.wrapped[ keypath ] ) {
 				// Did we unwrap it?
 				if ( wrapper.teardown() !== false ) {
+					// Is this right?
+					// What's the meaning of returning false from teardown?
+					// Could there be a GC ramification if this is a "real" ractive.teardown()?
 					this.wrapped[ keypath ] = null;
 				}
 			}
@@ -13620,10 +13627,15 @@
 	/* viewmodel/prototype/set.js */
 	var viewmodel$set = function( isEqual, createBranch ) {
 
-		return function Viewmodel$set( keypath, value, silent ) {
-			var keys, lastKey, parentKeypath, parentValue, computation, wrapper, evaluator, dontTeardownWrapper;
+		var __export;
+		__export = function Viewmodel$set( keypath, value, silent ) {
+			var computation, wrapper, evaluator, dontTeardownWrapper;
 			computation = this.computations[ keypath ];
-			if ( computation && !computation.setting ) {
+			if ( computation ) {
+				if ( computation.setting ) {
+					// let the other computation set() handle things...
+					return;
+				}
 				computation.set( value );
 				value = computation.get();
 			}
@@ -13648,20 +13660,7 @@
 				evaluator.value = value;
 			}
 			if ( !computation && !evaluator && !dontTeardownWrapper ) {
-				keys = keypath.split( '.' );
-				lastKey = keys.pop();
-				parentKeypath = keys.join( '.' );
-				wrapper = this.wrapped[ parentKeypath ];
-				if ( wrapper && wrapper.set ) {
-					wrapper.set( lastKey, value );
-				} else {
-					parentValue = wrapper ? wrapper.get() : this.get( parentKeypath );
-					if ( !parentValue ) {
-						parentValue = createBranch( lastKey );
-						this.set( parentKeypath, parentValue, true );
-					}
-					parentValue[ lastKey ] = value;
-				}
+				resolveSet( this, keypath, value );
 			}
 			if ( !silent ) {
 				this.mark( keypath );
@@ -13672,6 +13671,42 @@
 				this.clearCache( keypath );
 			}
 		};
+
+		function resolveSet( viewmodel, keypath, value ) {
+			var keys, lastKey, parentKeypath, wrapper, parentValue, wrapperSet, valueSet;
+			wrapperSet = function() {
+				if ( wrapper.set ) {
+					wrapper.set( lastKey, value );
+				} else {
+					parentValue = wrapper.get();
+					valueSet();
+				}
+			};
+			valueSet = function() {
+				if ( !parentValue ) {
+					parentValue = createBranch( lastKey );
+					viewmodel.set( parentKeypath, parentValue, true );
+				}
+				parentValue[ lastKey ] = value;
+			};
+			keys = keypath.split( '.' );
+			lastKey = keys.pop();
+			parentKeypath = keys.join( '.' );
+			wrapper = viewmodel.wrapped[ parentKeypath ];
+			if ( wrapper ) {
+				wrapperSet();
+			} else {
+				parentValue = viewmodel.get( parentKeypath );
+				// may have been wrapped via the above .get()
+				// call on viewmodel if this is first access via .set()!
+				if ( wrapper = viewmodel.wrapped[ parentKeypath ] ) {
+					wrapperSet();
+				} else {
+					valueSet();
+				}
+			}
+		}
+		return __export;
 	}( isEqual, createBranch );
 
 	/* viewmodel/prototype/splice.js */

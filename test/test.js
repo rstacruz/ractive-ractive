@@ -410,13 +410,15 @@ mdescribe("Ractive adaptor", versions, function (Ractive) {
       expect(audio.get('volume')).eql(60);
     });
 
-    /* this is a failing test... possibly due to an Ractive bug. */
-    it.skip('allows you to set the data via the wrapper', function () {
-      one.set('audio.volume', 70);
-      expect(one.get('audio.volume')).eql(70);
-      expect(two.get('audio.volume')).eql(70);
-      expect(audio.get('volume')).eql(70);
-    });
+    // Only in 0.6.0+ - https://github.com/ractivejs/ractive/issues/1285
+    if (~["edge"].indexOf('version')) {
+      it('allows you to set the data via the wrapper', function () {
+        one.set('audio.volume', 70);
+        expect(one.get('audio.volume')).eql(70);
+        expect(two.get('audio.volume')).eql(70);
+        expect(audio.get('volume')).eql(70);
+      });
+    }
   });
 
   /*
@@ -424,15 +426,17 @@ mdescribe("Ractive adaptor", versions, function (Ractive) {
    * possibly due to Ractive bugs.
    */
 
-  describe.skip("failures", function () {
-    it("set before get", function () {
-      child  = new Ractive();
-      parent = new Ractive({ data: { child: child }});
+  if (~["edge"].indexOf('version')) {
+    describe("failures", function () {
+      it("set before get", function () {
+        child  = new Ractive();
+        parent = new Ractive({ data: { child: child }});
 
-      parent.set('child.enabled', true);
-      expect(parent.get('child.enabled')).eql(true);
+        parent.set('child.enabled', true);
+        expect(parent.get('child.enabled')).eql(true);
+      });
     });
-  });
+  }
 
 
   afterEach(function expectLocksReleased() {
