@@ -1,11 +1,11 @@
 /* jshint expr: true */
 var expect = require('chai').expect;
-var Ractive = require('ractive');
-
-var child, parent, adapt, subchild, user;
+var proxy = require('proxyquire');
+var Ractive, child, parent, adapt, subchild, user;
 
 before(function () {
-  require('../index');
+  Ractive = require('../vendor/edge/ractive.js');
+  proxy('../index', { 'ractive': Ractive });
   adapt = Ractive.adaptors.Ractive;
   Ractive.defaults.adapt = ['Ractive'];
 });
@@ -414,7 +414,7 @@ describe('Ractive.defaults', function () {
  * possibly due to Ractive bugs.
  */
 
-describe.skip("failures", function () {
+describe("failures", function () {
   it("set before get", function () {
     child  = new Ractive();
     parent = new Ractive({ data: { child: child }});
