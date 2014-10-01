@@ -400,14 +400,30 @@ describe('Ractive.defaults', function () {
     expect(audio.get('volume')).eql(60);
   });
 
-  /* this is a failing test :( */
-  xit('allows you to set the data via the wrapper', function () {
+  /* this is a failing test... possibly due to an Ractive bug. */
+  it.skip('allows you to set the data via the wrapper', function () {
     one.set('audio.volume', 70);
     expect(one.get('audio.volume')).eql(70);
     expect(two.get('audio.volume')).eql(70);
     expect(audio.get('volume')).eql(70);
   });
 });
+
+/*
+ * failing tests:
+ * possibly due to Ractive bugs.
+ */
+
+describe.skip("failures", function () {
+  it("set before get", function () {
+    child  = new Ractive();
+    parent = new Ractive({ data: { child: child }});
+
+    parent.set('child.enabled', true);
+    expect(parent.get('child.enabled')).eql(true);
+  });
+});
+
 
 afterEach(function expectLocksReleased() {
   expect(Object.keys(adapt.locked)).length(0);
