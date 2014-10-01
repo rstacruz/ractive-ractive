@@ -9,7 +9,7 @@
   "author": "Rico Sta. Cruz <hi@ricostacruz.com>",
   "license": "MIT",
   "peerDependencies": {
-    "ractive": "*"
+    "ractive": "> 0.5.5"
   },
   "devDependencies": {
     "chai": "^1.9.1",
