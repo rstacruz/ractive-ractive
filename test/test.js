@@ -2,17 +2,24 @@
 require('./mocha-multi');
 
 var versions = {
-  'default': require('ractive'),
   '0.6.0':   require('../vendor/ractive/edge/ractive.js'),
   '0.5.8':   require('../vendor/ractive/0.5.8/ractive.js'),
   '0.5.5':   require('../vendor/ractive/0.5.5/ractive.js'),
+  '0.5.0':   require('../vendor/ractive/0.5.0/ractive.js'),
 };
 
-mdescribe("Ractive adaptor", versions, function (Ractive) {
+mdescribe("Ractive adaptor", versions, function (Ractive, version) {
 
   var expect = require('chai').expect;
+  var semver = require('semver');
   var proxy = require('proxyquire');
   var child, parent, adapt, subchild, user;
+
+  function forVersion (spec, fn) {
+    var _desc = (semver.satisfies(version, spec)) ?
+      describe : describe.skip;
+    _desc(spec, fn);
+  }
 
   before(function () {
     proxy('../index', { 'ractive': Ractive });
@@ -44,12 +51,14 @@ mdescribe("Ractive adaptor", versions, function (Ractive) {
       expect(parent.get('child.one')).eql(1);
     });
 
-    it(".reset on child gets picked up", function () {
-      parent.set('child', child);
-      child.reset({ ten: 10, eleven: 11 });
+    forVersion('> 0.5.0', function () {
+      it(".reset on child gets picked up", function () {
+        parent.set('child', child);
+        child.reset({ ten: 10, eleven: 11 });
 
-      expect(parent.get('child.ten')).eql(10);
-      expect(parent.get('child.eleven')).eql(11);
+        expect(parent.get('child.ten')).eql(10);
+        expect(parent.get('child.eleven')).eql(11);
+      });
     });
 
     it('propagates changes from child to parent', function () {
@@ -411,14 +420,14 @@ mdescribe("Ractive adaptor", versions, function (Ractive) {
     });
 
     // Only in 0.6.0+ - https://github.com/ractivejs/ractive/issues/1285
-    if (~["edge"].indexOf('version')) {
+    forVersion('>= 0.6.0', function () {
       it('allows you to set the data via the wrapper', function () {
         one.set('audio.volume', 70);
         expect(one.get('audio.volume')).eql(70);
         expect(two.get('audio.volume')).eql(70);
         expect(audio.get('volume')).eql(70);
       });
-    }
+    });
   });
 
   /*
@@ -426,7 +435,7 @@ mdescribe("Ractive adaptor", versions, function (Ractive) {
    * possibly due to Ractive bugs.
    */
 
-  if (~["edge"].indexOf('version')) {
+  if (semver.satisfies(version, '>= 0.6.0')) {
     describe("failures", function () {
       it("set before get", function () {
         child  = new Ractive();

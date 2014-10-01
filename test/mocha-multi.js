@@ -30,11 +30,12 @@
 
 global.mdescribe = function (name, specs, fn) {
   Object.keys(specs).forEach(function (key) {
-    var item = specs[key];
-    describe(name + " (" + key + ")", function () {
-      var args = Array.isArray(item) ? item : [ item ];
-      args.push(key);
-      return fn.apply(this, args);
-    });
+    (function (item, key) {
+      describe(name + " (" + key + ")", function () {
+        var args = Array.isArray(item) ? item : [ item ];
+        args.push(key);
+        return fn.apply(this, args);
+      });
+    })(specs[key], key);
   });
 };
