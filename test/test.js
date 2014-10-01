@@ -435,7 +435,7 @@ mdescribe("Ractive adaptor", versions, function (Ractive, version) {
    * possibly due to Ractive bugs.
    */
 
-  if (semver.satisfies(version, '>= 0.6.0')) {
+  forVersion('>= 0.6.0', function () {
     describe("failures", function () {
       it("set before get", function () {
         child  = new Ractive();
@@ -445,8 +445,7 @@ mdescribe("Ractive adaptor", versions, function (Ractive, version) {
         expect(parent.get('child.enabled')).eql(true);
       });
     });
-  }
-
+  });
 
   afterEach(function expectLocksReleased() {
     expect(Object.keys(adapt.locked)).length(0);
