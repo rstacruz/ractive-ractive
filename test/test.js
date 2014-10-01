@@ -382,6 +382,11 @@ describe('Ractive.defaults', function () {
     two = new Ractive();
   });
 
+  afterEach(function () {
+    audio.teardown();
+    delete Ractive.defaults.data.audio;
+  });
+
   it('picks up shared objects from the start', function () {
     expect(one.get('audio.volume')).eql(30);
     expect(two.get('audio.volume')).eql(30);
@@ -395,7 +400,8 @@ describe('Ractive.defaults', function () {
     expect(audio.get('volume')).eql(60);
   });
 
-  xit('picks up changes from the shared object', function () {
+  /* this is a failing test :( */
+  xit('allows you to set the data via the wrapper', function () {
     one.set('audio.volume', 70);
     expect(one.get('audio.volume')).eql(70);
     expect(two.get('audio.volume')).eql(70);
