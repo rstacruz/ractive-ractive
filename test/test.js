@@ -1,5 +1,9 @@
 /* jshint expr: true */
-require('./mocha-multi');
+var
+  mdescribe = require('mocha-repeat'),
+  expect    = require('chai').expect,
+  semver    = require('semver'),
+  proxy     = require('proxyquire');
 
 var versions = {
   '0.6.0':   require('../vendor/ractive/edge/ractive.js'),
@@ -10,17 +14,9 @@ var versions = {
 
 mdescribe("Ractive adaptor", versions, function (Ractive, version) {
 
-  var expect = require('chai').expect;
-  var semver = require('semver');
-  var proxy = require('proxyquire');
   var child, parent, adapt, subchild, user;
 
-  function forVersion (spec, fn) {
-    var _desc = (semver.satisfies(version, spec)) ?
-      describe : describe.skip;
-    _desc(spec, fn);
-  }
-
+  // Load dependencies
   before(function () {
     proxy('../index', { 'ractive': Ractive });
     adapt = Ractive.adaptors.Ractive;
@@ -430,25 +426,33 @@ mdescribe("Ractive adaptor", versions, function (Ractive, version) {
     });
   });
 
-  /*
-   * failing tests:
-   * possibly due to Ractive bugs.
-   */
-
+  // Only in 0.6.0+ - https://github.com/ractivejs/ractive/issues/1285
   forVersion('>= 0.6.0', function () {
-    describe("failures", function () {
-      it("set before get", function () {
-        child  = new Ractive();
-        parent = new Ractive({ data: { child: child }});
+    it("set before get", function () {
+      child  = new Ractive();
+      parent = new Ractive({ data: { child: child }});
 
-        parent.set('child.enabled', true);
-        expect(parent.get('child.enabled')).eql(true);
-      });
+      parent.set('child.enabled', true);
+      expect(parent.get('child.enabled')).eql(true);
     });
   });
+
+  /*
+   * expect locks to be released
+   */
 
   afterEach(function expectLocksReleased() {
     expect(Object.keys(adapt.locked)).length(0);
   });
+
+  /*
+   * helper
+   */
+
+  function forVersion (spec, fn) {
+    var _desc = (semver.satisfies(version, spec)) ?
+      describe : describe.skip;
+    _desc(spec, fn);
+  }
 
 });
