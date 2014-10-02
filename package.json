@@ -1,8 +1,12 @@
 {
   "name": "ractive-ractive",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "Ractive adaptor for Ractive objects",
   "main": "index.js",
+  "repository": {
+     "type": "git",
+     "url": "https://github.com/rstacruz/ractive-ractive.git"
+  },
   "scripts": {
     "test": "mocha"
   },
@@ -14,6 +18,7 @@
   "devDependencies": {
     "chai": "^1.9.1",
     "mocha": "^1.21.4",
+    "ractive-0.5.0": "ractivejs/ractive#v0.5.0",
     "mocha-clean": "^0.2.0",
     "mocha-repeat": "^0.1.0",
     "proxyquire": "^1.0.1",

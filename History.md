@@ -1,6 +1,8 @@
-## Next version
+## v0.4.3 - October  2, 2014
 
-* Update documentation.
+No code changes, just package info and readme updates.
+
+* Update readme documentation to suggest `Ractive.defaults.adapt.push`.
 * Internal: update tests.
 
 ## v0.4.2 - September 25, 2014
