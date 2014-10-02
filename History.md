@@ -1,3 +1,8 @@
+## Next version
+
+* Update documentation.
+* Internal: update tests.
+
 ## v0.4.2 - September 25, 2014
 
 * Fix legacy IE compatibility by removing dependency on `Object.keys`.
