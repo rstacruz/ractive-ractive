@@ -22,8 +22,5 @@
     "mocha-repeat": "^0.1.0",
     "proxyquire": "^1.0.1",
     "semver": "^4.0.3"
-  },
-  "dependencies": {
-    "mocha-clean": "^0.2.0"
   }
 }

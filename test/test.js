@@ -18,7 +18,7 @@ mdescribe("Ractive adaptor", versions, function (Ractive, version) {
 
   // Load dependencies
   before(function () {
-    proxy('../index', { 'ractive': Ractive });
+    proxy('../index', { ractive: Ractive });
     adapt = Ractive.adaptors.Ractive;
     Ractive.defaults.adapt = ['Ractive'];
   });
