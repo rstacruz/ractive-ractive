@@ -1,3 +1,7 @@
+## v0.4.4 - October  2, 2014
+
+* Fix package.json not to depend on `mocha-clean` unless in development.
+
 ## v0.4.3 - October  2, 2014
 
 No code changes, just package info and readme updates.

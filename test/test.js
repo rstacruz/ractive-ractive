@@ -6,10 +6,10 @@ var
   proxy     = require('proxyquire');
 
 var versions = {
-  '0.6.0':   require('../vendor/ractive/edge/ractive.js'),
-  '0.5.8':   require('../vendor/ractive/0.5.8/ractive.js'),
-  '0.5.5':   require('../vendor/ractive/0.5.5/ractive.js'),
-  '0.5.0':   require('../vendor/ractive/0.5.0/ractive.js'),
+  '0.6.0':   require('../vendor/ractive/ractive-edge.js'),
+  '0.5.8':   require('../vendor/ractive/ractive-0.5.8.js'),
+  '0.5.5':   require('../vendor/ractive/ractive-0.5.5.js'),
+  '0.5.0':   require('../vendor/ractive/ractive-0.5.0.js'),
 };
 
 mdescribe("Ractive adaptor", versions, function (Ractive, version) {
