@@ -4,8 +4,8 @@
   "description": "Ractive adaptor for Ractive objects",
   "main": "index.js",
   "repository": {
-     "type": "git",
-     "url": "https://github.com/rstacruz/ractive-ractive.git"
+    "type": "git",
+    "url": "https://github.com/rstacruz/ractive-ractive.git"
   },
   "scripts": {
     "test": "mocha"
@@ -23,5 +23,12 @@
     "proxyquire": "^1.0.1",
     "semver": "^4.0.3",
     "ractive": "*"
+  },
+  "bugs": {
+    "url": "https://github.com/rstacruz/ractive-ractive/issues"
+  },
+  "homepage": "https://github.com/rstacruz/ractive-ractive",
+  "directories": {
+    "test": "test"
   }
 }
