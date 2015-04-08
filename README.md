@@ -96,7 +96,7 @@ require('ractive-ractive')
 
 ## Credits
 
-Hat tip to the original Ractive adaptor from @Rich-Harris.
+Hat tip to the original Ractive adaptor from [@Rich-Harris].
 ([src](https://github.com/Rich-Harris/Ractive-plugins/blob/master/adaptors/Ractive.js))
 
 <br>
@@ -113,3 +113,4 @@ Authored and maintained by Rico Sta. Cruz with help from contributors ([list][co
 [MIT]: http://mit-license.org/
 [contributors]: http://github.com/rstacruz/ractive-ractive/contributors
 [ractive#1249]: https://github.com/ractivejs/ractive/issues/1249 
+[@Rich-Harris]: https://github.com/Rich-Harris
