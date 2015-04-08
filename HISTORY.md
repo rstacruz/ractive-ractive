@@ -1,3 +1,9 @@
+## v0.4.5 - Apr 8, 2015
+
+* Add LICENSE file.
+* Update package.json to point repository to GitHub.
+* No actual functionality changes.
+
 ## v0.4.4 - October  2, 2014
 
 * Fix package.json not to depend on `mocha-clean` unless in development.
