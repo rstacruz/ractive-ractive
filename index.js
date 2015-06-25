@@ -319,9 +319,6 @@
               parent._update(childKey + "." + key);
             }
           });
-
-          // Apply the remaining keys to the parent
-          return parent["_" + method].apply(parent, arguments);
         }
 
         // Default behavior
