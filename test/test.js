@@ -6,7 +6,8 @@ var
   proxy     = require('proxyquire');
 
 var versions = {
-  '0.6.0':   require('../vendor/ractive/ractive-edge.js'),
+  '0.7.3':   require('../vendor/ractive/ractive-0.7.3.js'),
+  '0.6.1':   require('../vendor/ractive/ractive-0.6.1.js'),
   '0.5.8':   require('../vendor/ractive/ractive-0.5.8.js'),
   '0.5.5':   require('../vendor/ractive/ractive-0.5.5.js'),
   '0.5.0':   require('../vendor/ractive/ractive-0.5.0.js'),
