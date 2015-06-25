@@ -368,14 +368,16 @@
     
     function unhookAccessors () {
       // Only hook the accessors once
-      if (parent._accessorsHooked === true) {
-        delete parent._accessorsHooked;
-
-        each(ractiveMethods, function (config, method) {
-          parent[method] = parent["_" + method];
-          delete parent["_" + method];
-        });
+      if (parent._accessorsHooked !== true) {
+        return;
       }
+
+      delete parent._accessorsHooked;
+
+      each(ractiveMethods, function (config, method) {
+        parent[method] = parent["_" + method];
+        delete parent["_" + method];
+      });
     }
 
     /*
