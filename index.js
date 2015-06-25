@@ -26,6 +26,77 @@
   Adaptor.maxKeyLength = 2048;
 
   /*
+   * Ractive instance accessor methods that will be proxied by Ractive-Ractive.
+   */
+  
+  var ractiveMethods = {
+    add: {
+      modifiesData: true,
+      mapAllowed: false
+    },
+    animate: {
+      modifiesData: true,
+      mapAllowed: true
+    },
+    get: {
+      modifiesData: false,
+      mapAllowed: false
+    },
+    merge: {
+      modifiesData: true,
+      mapAllowed: false
+    },
+    observe: {
+      modifiesData: false,
+      mapAllowed: true
+    },
+    observeOnce: {
+      modifiesData: false,
+      mapAllowed: false
+    },
+    pop: {
+      modifiesData: true,
+      mapAllowed: false
+    },
+    push: {
+      modifiesData: true,
+      mapAllowed: false
+    },
+    set: {
+      modifiesData: true,
+      mapAllowed: true
+    },
+    shift: {
+      modifiesData: true,
+      mapAllowed: false
+    },
+    splice: {
+      modifiesData: true,
+      mapAllowed: false
+    },
+    subtract: {
+      modifiesData: true,
+      mapAllowed: false
+    },
+    toggle: {
+      modifiesData: true,
+      mapAllowed: false
+    },
+    unshift: {
+      modifiesData: true,
+      mapAllowed: false
+    },
+    update: {
+      modifiesData: false,
+      mapAllowed: false
+    },
+    updateModel: {
+      modifiesData: false,
+      mapAllowed: false
+    }
+  };
+
+  /*
    * Check if the child is an Ractive instance.
    *
    * Also, if this key has been wrapped before, don't rewrap it. (Happens on
@@ -79,17 +150,13 @@
     };
 
     /*
-     * Initializes the adaptor. Performs a few tricks:
-     *
-     * [1] If the child has its own Ractive instances, recurse upwards. This
-     * will do `parent.set('child.grandchild', instance)` so that the
-     * `parent` can listen to the grandchild.
+     * Initializes the adaptor.
      */
 
     function setup () {
+      hookAccessors();
       checkForRecursion();
       markAsWrapped();
-      parent.set(prefixer(get())); // [1]
       child.on('change', onChange);
 
       if (Adaptor.fireWrapEvents) {
@@ -100,6 +167,8 @@
 
     function teardown () {
       delete parent._ractiveWraps[keypath];
+      updateChildrenPattern();
+      unhookAccessors();
       child.off('change', onChange);
 
       if (Adaptor.fireWrapEvents) {
@@ -168,6 +237,151 @@
     }
 
     /*
+     * Update the parent's child key RegEx pattern used by accessors
+     */
+    
+    function updateChildrenPattern () {
+      if (!parent._ractiveWraps) {
+        delete parent._childrenPattern;
+        return;
+      }
+
+      // Collect the current `_ractiveWraps` keys
+      var keys = [];
+      each(parent._ractiveWraps, function (value, key) {
+        keys.push(key);
+      });
+
+      if (keys.length === 0) {
+        delete parent._childrenPattern;
+        return;
+      }
+
+      parent._childrenPattern = new RegExp("^(" + keys.join(")\\..+?|(") + ")\\..+?$");
+    }
+
+    /*
+     * Generates a Ractive accessor proxy for the given method and configuration.
+     */
+    
+    function generateAccessor(method, config) {
+      config = config || {};
+
+      return function (keypath) {
+        var child;
+        var childKey;
+        var result;
+        
+        // Exit early if there aren't any children or we're not targeting a keypath
+        if (parent._childrenPattern == null || keypath == null) {
+          return parent["_" + method].apply(parent, arguments);
+        }
+
+        // Handle a `key, value` set
+        if (isString(keypath) === true) {
+           childKey = parseAccessorKey(keypath);
+           child = parent._ractiveWraps[childKey];
+
+          // The key isn't a child of parent
+          if (child == null) {
+            return parent["_" + method].apply(parent, arguments);
+          }
+
+          // Remove the root of the key before marshalling it to the child
+          arguments[0] = arguments[0].replace(childKey + ".", "");
+          result = child[method].apply(child, arguments);
+
+          if (config.modifiesData === true) {
+            parent._update(childKey + "." + arguments[0]);
+          }
+
+          return result;
+        }
+
+        // Handle when only a value object is passed to the Ractive instance
+        if (config.mapAllowed === true) {
+          // Filter out and marshall keys which apply to children
+          each(keypath, function (value, key) {
+            childKey = parseAccessorKey(keypath);
+            child = parent._ractiveWraps[childKey];
+
+            if (child == null) {
+              return;
+            }
+            
+            delete keypath[key];
+
+            // Remove the root of the key before marshalling it to the child
+            key = key.replace(childKey + ".", "");
+            child[method].call(child, key, value);
+
+            if (config.modifiesData === true) {
+              parent._update(childKey + "." + key);
+            }
+          });
+
+          // Apply the remaining keys to the parent
+          return parent["_" + method].apply(parent, arguments);
+        }
+
+        // Default behavior
+        return parent["_" + method].apply(parent, arguments);
+      };
+    }
+
+    /*
+     * Check all children to see if there are any matches and return the result.
+     */
+
+    function parseAccessorKey(keypath) {
+      if (parent._childrenPattern == null) {
+        return;
+      }
+
+      var childKeys = parent._childrenPattern.exec(keypath);
+
+      if (childKeys == null) {
+        return;
+      }
+      
+      return childKeys[1];
+    }
+
+    /*
+     * Overwrite the original Ractive methods with Ractive-Ractive accessor proxies.
+     */
+    
+    function hookAccessors () {
+      // Only hook the accessors once
+      if (parent._accessorsHooked === true) {
+        return;
+      }
+      
+      parent._accessorsHooked = true;
+
+      each(ractiveMethods, function (config, method) {
+        parent["_" + method] = parent[method];
+        parent[method] = generateAccessor(method, config);
+      });
+    }
+
+    /*
+     * Replace the Ractive-Ractive accessor proxies with the original implementations.
+     */
+    
+    function unhookAccessors () {
+      // Only hook the accessors once
+      if (parent._accessorsHooked === true) {
+        delete parent._accessorsHooked;
+
+        each(ractiveMethods, function (config, method) {
+          parent[method] = parent["_" + method];
+          delete parent["_" + method];
+        });
+      }
+    }
+
+    /*
      * Die on recursion.
      * Keypath will look like 'child.sub.parent.child.sub.parent' ad nauseum.
      */
@@ -185,6 +399,7 @@
     function markAsWrapped () {
       if (!parent._ractiveWraps) parent._ractiveWraps = {};
       parent._ractiveWraps[keypath] = child;
+      updateChildrenPattern();
     }
   }
 
@@ -198,4 +413,11 @@
     }
   }
 
+  /*
+   * isString helper
+   */
+  
+   function isString (string) {
+    return typeof string == 'string' || (!!string && typeof string == 'object' && Object.prototype.toString.call(string) == '[object String]');
+   }
 }));
