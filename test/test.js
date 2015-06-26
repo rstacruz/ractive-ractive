@@ -220,22 +220,22 @@ mdescribe("Ractive adaptor", versions, function (Ractive, version) {
       });
 
       it('passes root down the chain', function () {
-        expect(parent === parent.root).eql(true);
-        expect(child.root === parent.root).eql(true);
-        expect(subchild.root === parent.root).eql(true);
+        expect(parent).eql(parent.root);
+        expect(child.root).eql(parent.root);
+        expect(subchild.root).eql(parent.root);
       });
 
       it('reassigns root when a chain is modified', function () {
         parent.set('child', undefined);
         
-        expect(child === child.root).eql(true);
-        expect(subchild.root === child.root).eql(true);
+        expect(child).eql(child.root);
+        expect(subchild.root).eql(child.root);
 
         parent.set('child', child);
 
-        expect(parent === parent.root).eql(true);
-        expect(child.root === parent.root).eql(true);
-        expect(subchild.root === parent.root).eql(true);
+        expect(parent).eql(parent.root);
+        expect(child.root).eql(parent.root);
+        expect(subchild.root).eql(parent.root);
       });
     });
 
