@@ -218,6 +218,25 @@ mdescribe("Ractive adaptor", versions, function (Ractive, version) {
         expect(parent.get('child.subchild.enabled')).be.undefined;
         expect(child.get('subchild.enabled')).be.undefined;
       });
+
+      it('passes root down the chain', function () {
+        expect(parent === parent.root).eql(true);
+        expect(child.root === parent.root).eql(true);
+        expect(subchild.root === parent.root).eql(true);
+      });
+
+      it('reassigns root when a chain is modified', function () {
+        parent.set('child', undefined);
+        
+        expect(child === child.root).eql(true);
+        expect(subchild.root === child.root).eql(true);
+
+        parent.set('child', child);
+
+        expect(parent === parent.root).eql(true);
+        expect(child.root === parent.root).eql(true);
+        expect(subchild.root === parent.root).eql(true);
+      });
     });
 
     describe('organized non-linearly', function () {
