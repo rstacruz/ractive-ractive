@@ -247,17 +247,17 @@
       }
 
       // Collect the current `_ractiveWraps` keys
-      var keys = [];
+      parent._childKeys = [];
       each(parent._ractiveWraps, function (value, key) {
-        keys.push(key);
+        parent._childKeys.push(key);
       });
 
-      if (keys.length === 0) {
+      if (parent._childKeys.length === 0) {
         delete parent._childrenPattern;
         return;
       }
 
-      parent._childrenPattern = new RegExp("^(" + keys.join(")\\..+?|(") + ")\\..+?$");
+      parent._childrenPattern = new RegExp("^(" + parent._childKeys.join(")\\..+?|(") + ")\\..+?$");
     }
 
     /*
