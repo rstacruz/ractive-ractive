@@ -5,7 +5,7 @@ template-less Ractive objects as models.
 
 *Find more Ractive.js plugins at [docs.ractivejs.org/latest/plugins](http://docs.ractivejs.org/latest/plugins)*
 
-[![Status](http://img.shields.io/travis/rstacruz/ractive-ractive/master.svg?style=flat)](https://travis-ci.org/rstacruz/ractive-ractive "See test builds")
+[![Status](https://travis-ci.org/rstacruz/ractive-ractive.svg?branch=master)](https://travis-ci.org/rstacruz/ractive-ractive "See test builds")
 
 <br>
 
