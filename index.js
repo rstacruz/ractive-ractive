@@ -156,8 +156,8 @@
     function setup () {
       hookAccessors();
       checkForRecursion();
-      updateRoot(parent.root);
       storeReferences();
+      updateRoot();
       child.on('change', onChange);
 
       if (Adaptor.fireWrapEvents) {
@@ -175,8 +175,16 @@
         unhookAccessors();
       }
 
-      // Assign the child as its own root
-      updateRoot(child);
+      // Calculate how many parents remain for the child
+      var numberOfParents = 0;
+      each(child._parents, function () {
+        numberOfParents++;
+      });
+
+      // Assign the child as its own root if it no longer has parents
+      if (numberOfParents === 0) {
+        updateRoot(child);
+      }
 
       child.off('change', onChange);
 
@@ -394,26 +402,26 @@
      */
 
     function updateRoot (root) {
-      if (child._updateRoot == null) {
-        child._updateRoot = function (root) {
-          var args = arguments;
+      root = root || parent.root;
 
-          this.root = root;
+      child.root = root;
 
-          if (this._ractiveWraps != null) {
-            each(this._ractiveWraps, function (child) {
-              // Prevent infinite recursion
-              if (child.root === root) {
-                return;
-              }
+      (function updateChildren(parent) {
+        if (parent._children == null) {
+          return;
+        }
 
-              child._updateRoot.apply(child, args);
-            });
+        each(parent._children, function (child) {
+          // Prevent infinite recursion
+          if (child.root === root) {
+            return;
           }
-        };
-      }
 
-      child._updateRoot(root);
+          child.root = root;
+
+          updateChildren(child);
+        });
+      })(child);
     }
 
     /*
