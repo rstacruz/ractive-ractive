@@ -157,6 +157,7 @@
       hookAccessors();
       checkForRecursion();
       markAsWrapped();
+      updateRoot(parent.root);
       child.on('change', onChange);
 
       if (Adaptor.fireWrapEvents) {
@@ -172,6 +173,9 @@
       if (parent._childKeys.length === 0) {
         unhookAccessors();
       }
+
+      // Assign the child as its own root
+      updateRoot(child);
 
       child.off('change', onChange);
 
@@ -382,6 +386,33 @@
         parent[method] = parent["_" + method];
         delete parent["_" + method];
       });
+    }
+
+    /*
+     * Updates the root reference of the child and its descendants.
+     */
+
+    function updateRoot (root) {
+      if (child._updateRoot == null) {
+        child._updateRoot = function (root) {
+          var args = arguments;
+
+          this.root = root;
+
+          if (this._ractiveWraps != null) {
+            each(this._ractiveWraps, function (child) {
+              // Prevent infinite recursion
+              if (child.root === root) {
+                return;
+              }
+
+              child._updateRoot.apply(child, args);
+            });
+          }
+        };
+      }
+
+      child._updateRoot(root);
     }
 
     /*
