@@ -108,8 +108,8 @@
       return false;
 
     if (parent &&
-        parent._ractiveWraps &&
-        parent._ractiveWraps[keypath])
+        parent._children &&
+        parent._children[keypath])
       return false;
 
     return true;
@@ -156,8 +156,8 @@
     function setup () {
       hookAccessors();
       checkForRecursion();
-      markAsWrapped();
       updateRoot(parent.root);
+      storeReferences();
       child.on('change', onChange);
 
       if (Adaptor.fireWrapEvents) {
@@ -167,7 +167,7 @@
     }
 
     function teardown () {
-      delete parent._ractiveWraps[keypath];
+      delete parent._children[keypath];
       updateChildrenPattern();
 
       if (parent._childKeys.length === 0) {
@@ -249,14 +249,14 @@
      */
     
     function updateChildrenPattern () {
-      if (!parent._ractiveWraps) {
+      if (!parent._children) {
         delete parent._childrenPattern;
         return;
       }
 
-      // Collect the current `_ractiveWraps` keys
+      // Collect the current `_children` keys
       parent._childKeys = [];
-      each(parent._ractiveWraps, function (value, key) {
+      each(parent._children, function (value, key) {
         parent._childKeys.push(key);
       });
 
@@ -288,7 +288,7 @@
         // Handle a `key, value` set
         if (isString(keypath) === true) {
            childKey = parseAccessorKey(keypath);
-           child = parent._ractiveWraps[childKey];
+           child = parent._children[childKey];
 
           // The key isn't a child of parent
           if (child == null) {
@@ -311,7 +311,7 @@
           // Filter out and marshall keys which apply to children
           each(keypath, function (value, key) {
             childKey = parseAccessorKey(keypath);
-            child = parent._ractiveWraps[childKey];
+            child = parent._children[childKey];
 
             if (child == null) {
               return;
@@ -430,9 +430,11 @@
      * This value is used on `filter()`.
      */
 
-    function markAsWrapped () {
-      if (!parent._ractiveWraps) parent._ractiveWraps = {};
-      parent._ractiveWraps[keypath] = child;
+    function storeReferences () {
+      if (!parent._children) parent._children = {};
+      
+      parent._children[keypath] = child;
+
       updateChildrenPattern();
     }
   }
