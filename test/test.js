@@ -150,6 +150,24 @@ mdescribe("Ractive adaptor", versions, function (Ractive, version) {
       parent.set('child', child);
       parent.set('child', undefined);
     });
+
+    it('proxies to a child\'s data object, not the instance properties', function () {
+      var template = child.template;
+
+      parent.set('child', child);
+      parent.set('child.data', 'datum');
+
+      expect(child.get('data')).eql('datum');
+
+      parent.set('child.template', 'templating');
+
+      expect(child.template).equal(template);
+      expect(child.get('template')).equal('templating');
+
+      child.template = "<h1>Hello Test</h1>";
+      expect(child.get('template')).equal('templating');
+      expect(parent.get('child.template')).equal('templating');
+    });
   });
 
   /*
