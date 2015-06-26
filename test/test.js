@@ -6,7 +6,8 @@ var
   proxy     = require('proxyquire');
 
 var versions = {
-  '0.6.0':   require('../vendor/ractive/ractive-edge.js'),
+  '0.7.3':   require('../vendor/ractive/ractive-0.7.3.js'),
+  '0.6.1':   require('../vendor/ractive/ractive-0.6.1.js'),
   '0.5.8':   require('../vendor/ractive/ractive-0.5.8.js'),
   '0.5.5':   require('../vendor/ractive/ractive-0.5.5.js'),
   '0.5.0':   require('../vendor/ractive/ractive-0.5.0.js'),
@@ -149,6 +150,24 @@ mdescribe("Ractive adaptor", versions, function (Ractive, version) {
       parent.set('child', child);
       parent.set('child', undefined);
     });
+
+    it('proxies to a child\'s data object, not the instance properties', function () {
+      var template = child.template;
+
+      parent.set('child', child);
+      parent.set('child.data', 'datum');
+
+      expect(child.get('data')).eql('datum');
+
+      parent.set('child.template', 'templating');
+
+      expect(child.template).equal(template);
+      expect(child.get('template')).equal('templating');
+
+      child.template = "<h1>Hello Test</h1>";
+      expect(child.get('template')).equal('templating');
+      expect(parent.get('child.template')).equal('templating');
+    });
   });
 
   /*
@@ -198,6 +217,25 @@ mdescribe("Ractive adaptor", versions, function (Ractive, version) {
 
         expect(parent.get('child.subchild.enabled')).be.undefined;
         expect(child.get('subchild.enabled')).be.undefined;
+      });
+
+      it('passes root down the chain', function () {
+        expect(parent).eql(parent.root);
+        expect(child.root).eql(parent.root);
+        expect(subchild.root).eql(parent.root);
+      });
+
+      it('reassigns root when a chain is modified', function () {
+        parent.set('child', undefined);
+        
+        expect(child).eql(child.root);
+        expect(subchild.root).eql(child.root);
+
+        parent.set('child', child);
+
+        expect(parent).eql(parent.root);
+        expect(child.root).eql(parent.root);
+        expect(subchild.root).eql(parent.root);
       });
     });
 
