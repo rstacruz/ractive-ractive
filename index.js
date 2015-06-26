@@ -157,6 +157,7 @@
       hookAccessors();
       checkForRecursion();
       storeReferences();
+      parent.root = parent.root || parent;
       updateRoot();
       child.on('change', onChange);
 
