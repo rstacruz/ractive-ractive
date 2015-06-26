@@ -168,6 +168,7 @@
 
     function teardown () {
       delete parent._children[keypath];
+      delete child._parents[parent._guid];
       updateChildrenPattern();
 
       if (parent._childKeys.length === 0) {
@@ -432,8 +433,10 @@
 
     function storeReferences () {
       if (!parent._children) parent._children = {};
+      if (!child._parents) child._parents = {};
       
       parent._children[keypath] = child;
+      child._parents[parent._guid] = parent;
 
       updateChildrenPattern();
     }
