@@ -1,19 +1,10 @@
 {
   "name": "ractive-ractive",
-  "version": "0.4.5",
   "description": "Ractive adaptor for Ractive objects",
-  "main": "index.js",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/rstacruz/ractive-ractive.git"
-  },
-  "scripts": {
-    "test": "mocha"
-  },
+  "version": "0.4.5",
   "author": "Rico Sta. Cruz <hi@ricostacruz.com>",
-  "license": "MIT",
-  "peerDependencies": {
-    "ractive": "> 0.5.5"
+  "bugs": {
+    "url": "https://github.com/rstacruz/ractive-ractive/issues"
   },
   "devDependencies": {
     "chai": "^1.9.1",
@@ -21,14 +12,29 @@
     "mocha-clean": "^0.2.0",
     "mocha-repeat": "^0.1.0",
     "proxyquire": "^1.0.1",
-    "semver": "^4.0.3",
-    "ractive": "*"
+    "ractive": "*",
+    "semver": "^4.0.3"
   },
-  "bugs": {
-    "url": "https://github.com/rstacruz/ractive-ractive/issues"
-  },
-  "homepage": "https://github.com/rstacruz/ractive-ractive",
   "directories": {
     "test": "test"
+  },
+  "homepage": "https://github.com/rstacruz/ractive-ractive",
+  "keywords": [
+    "adaptor",
+    "model",
+    "ractive",
+    "template"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "peerDependencies": {
+    "ractive": "> 0.5.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rstacruz/ractive-ractive.git"
+  },
+  "scripts": {
+    "test": "mocha"
   }
 }
