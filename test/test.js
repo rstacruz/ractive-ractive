@@ -149,6 +149,39 @@ mdescribe("Ractive adaptor", versions, function (Ractive, version) {
       parent.set('child', child);
       parent.set('child', undefined);
     });
+
+    it('doesnt bleed to instance properties', function () {
+      var original = child.template;
+
+      parent.set('child', child);
+      parent.set('child.template', 'jade');
+      expect(child.template).eql(original);
+    });
+
+    it('allows the name "data"', function () {
+      parent.set('child', child);
+      parent.set('child.data', 'this is data');
+      expect(child.get('data')).eql('this is data');
+    });
+
+    // https://github.com/rstacruz/ractive-ractive/pull/2/files
+    it('proxies to a childs data object, not the instance properties', function () {
+      var template = child.template;
+
+      parent.set('child', child);
+      parent.set('child.data', 'datum');
+
+      expect(child.get('data')).eql('datum');
+
+      parent.set('child.template', 'templating');
+
+      expect(child.template).equal(template);
+      expect(child.get('template')).equal('templating');
+
+      child.template = "<h1>Hello Test</h1>";
+      expect(child.get('template')).equal('templating');
+      expect(parent.get('child.template')).equal('templating');
+    });
   });
 
   /*
