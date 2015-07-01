@@ -484,9 +484,7 @@ mdescribe('Ractive adaptor', versions, function (Ractive, version) {
    */
 
   function forVersion (spec, fn) {
-    var _desc = (semver.satisfies(version, spec)) ?
-      describe : describe.skip;
-    _desc(spec, fn);
+    if (semver.satisfies(version, spec)) describe(spec, fn);
   }
 
 });
