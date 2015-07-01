@@ -1,4 +1,5 @@
-;(function (root, factory) {
+/* global define */
+void (function (root, factory) {
 
   if (typeof define === 'function' && define.amd) {
     define(['ractive'], factory);
@@ -33,13 +34,13 @@
    */
 
   function filter (child, keypath, parent) {
-    if (!(child instanceof Ractive))
-      return false;
+    if (!(child instanceof Ractive)) return false;
 
     if (parent &&
         parent._ractiveWraps &&
-        parent._ractiveWraps[keypath])
+        parent._ractiveWraps[keypath]) {
       return false;
+    }
 
     return true;
   }
@@ -133,14 +134,15 @@
       if (!child.computed) return child.get();
 
       var re = {};
-      
+
       each(child.get(), function (val, key) {
         re[key] = val;
       });
 
       each(child.computed, function (_, key) {
-        if (typeof re[key] === 'undefined')
+        if (typeof re[key] === 'undefined') {
           re[key] = child.get(key);
+        }
       });
 
       return re;
@@ -173,8 +175,9 @@
      */
 
     function checkForRecursion () {
-      if (keypath && keypath.length > Adaptor.maxKeyLength)
-        throw new Error("Keypath too long (possible circular dependency)");
+      if (keypath && keypath.length > Adaptor.maxKeyLength) {
+        throw new Error('Keypath too long (possible circular dependency)');
+      }
     }
 
     /*

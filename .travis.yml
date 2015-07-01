@@ -1,9 +1,6 @@
 language: node_js
-node_js: ["0.10"]
-
-notifications:
-  email:
-    recipients:
-     - dropbox+travis@ricostacruz.com
-    on_success: change
-    on_failure: change
+script:
+  - npm test
+  - ./node_modules/.bin/semistandard index.js test/test.js
+node_js:
+  - iojs

@@ -1,19 +1,19 @@
+/* global describe, it, beforeEach, afterEach, before */
 /* jshint expr: true */
-var
-  mdescribe = require('mocha-repeat'),
-  expect    = require('chai').expect,
-  semver    = require('semver'),
-  proxy     = require('proxyquire');
+var mdescribe = require('mocha-repeat');
+var expect = require('chai').expect;
+var semver = require('semver');
+var proxy = require('proxyquire');
 
 var versions = {
-  '0.7.3':   require('../vendor/ractive/ractive-0.7.3.js'),
-  '0.6.0':   require('../vendor/ractive/ractive-0.6.0.js'),
-  '0.5.8':   require('../vendor/ractive/ractive-0.5.8.js'),
-  '0.5.5':   require('../vendor/ractive/ractive-0.5.5.js'),
-  '0.5.0':   require('../vendor/ractive/ractive-0.5.0.js'),
+  '0.7.3': require('../vendor/ractive/ractive-0.7.3.js'),
+  '0.6.0': require('../vendor/ractive/ractive-0.6.0.js'),
+  '0.5.8': require('../vendor/ractive/ractive-0.5.8.js'),
+  '0.5.5': require('../vendor/ractive/ractive-0.5.5.js'),
+  '0.5.0': require('../vendor/ractive/ractive-0.5.0.js')
 };
 
-mdescribe("Ractive adaptor", versions, function (Ractive, version) {
+mdescribe('Ractive adaptor', versions, function (Ractive, version) {
   Ractive.DEBUG = false;
 
   var child, parent, adapt, subchild, user;
@@ -38,7 +38,7 @@ mdescribe("Ractive adaptor", versions, function (Ractive, version) {
     this.timeout(250);
 
     beforeEach(function () {
-      child  = new Ractive();
+      child = new Ractive();
       parent = new Ractive();
     });
 
@@ -50,7 +50,7 @@ mdescribe("Ractive adaptor", versions, function (Ractive, version) {
     });
 
     forVersion('> 0.5.0', function () {
-      it(".reset on child gets picked up", function () {
+      it('.reset on child gets picked up', function () {
         parent.set('child', child);
         child.reset({ ten: 10, eleven: 11 });
 
@@ -95,8 +95,7 @@ mdescribe("Ractive adaptor", versions, function (Ractive, version) {
         runs++;
         if (runs === 1) {
           expect(val).be.undefined;
-        }
-        else if (runs === 2) {
+        } else if (runs === 2) {
           expect(val).eql(3);
           next();
         }
@@ -107,7 +106,7 @@ mdescribe("Ractive adaptor", versions, function (Ractive, version) {
 
     it('updates the parent HTML when the child updates', function () {
       parent = new Ractive({
-        template: "{{#child}}value={{enabled}}{{/child}}"
+        template: '{{#child}}value={{enabled}}{{/child}}'
       });
 
       parent.set('child', child);
@@ -128,7 +127,7 @@ mdescribe("Ractive adaptor", versions, function (Ractive, version) {
 
     it('works bidirectionally with html', function () {
       child = new Ractive({
-        template: "value={{enabled}}"
+        template: 'value={{enabled}}'
       });
 
       expect(child.toHTML()).eql('value=');
@@ -180,7 +179,7 @@ mdescribe("Ractive adaptor", versions, function (Ractive, version) {
       expect(child.template).equal(template);
       expect(child.get('template')).equal('templating');
 
-      child.template = "<h1>Hello Test</h1>";
+      child.template = '<h1>Hello Test</h1>';
       expect(child.get('template')).equal('templating');
       expect(parent.get('child.template')).equal('templating');
     });
@@ -192,9 +191,9 @@ mdescribe("Ractive adaptor", versions, function (Ractive, version) {
 
   describe('using with deeply-nested cases', function () {
     beforeEach(function () {
-      subchild = new Ractive({ data: { name: "subchild" }});
-      child    = new Ractive({ data: { name: "child" }});
-      parent   = new Ractive({ data: { name: "parent" }});
+      subchild = new Ractive({ data: { name: 'subchild' }});
+      parent = new Ractive({ data: { name: 'parent' }});
+      child = new Ractive({ data: { name: 'child' }});
     });
 
     it('catches circular dependencies', function () {
@@ -296,7 +295,7 @@ mdescribe("Ractive adaptor", versions, function (Ractive, version) {
   describe('set on observe', function () {
     beforeEach(function () {
       parent = new Ractive();
-      child  = new Ractive();
+      child = new Ractive();
     });
 
     it('works when observed from child', function () {
@@ -463,8 +462,8 @@ mdescribe("Ractive adaptor", versions, function (Ractive, version) {
 
   // Only in 0.6.0+ - https://github.com/ractivejs/ractive/issues/1285
   forVersion('>= 0.6.0', function () {
-    it("set before get", function () {
-      child  = new Ractive();
+    it('set before get', function () {
+      child = new Ractive();
       parent = new Ractive({ data: { child: child }});
 
       parent.set('child.enabled', true);
@@ -476,7 +475,7 @@ mdescribe("Ractive adaptor", versions, function (Ractive, version) {
    * expect locks to be released
    */
 
-  afterEach(function expectLocksReleased() {
+  afterEach(function expectLocksReleased () {
     expect(Object.keys(adapt.locked)).length(0);
   });
 
