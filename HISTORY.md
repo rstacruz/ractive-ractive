@@ -1,8 +1,8 @@
 ## v1.0.0 - Jul  2, 2015
 
-Just declaring 1.0.0-ness. No actual functionality changes.
+Just declaring 1.0.0. No actual functionality changes.
 
-* Confirming support for 0.7.3 (with tests added).
+* Confirming support for Ractive 0.7.3 (with tests added).
 * Strengthened test suite.
 * Update coding style to semistandard.
 
