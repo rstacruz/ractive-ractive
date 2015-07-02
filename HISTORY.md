@@ -76,7 +76,7 @@ No code changes, just package info and readme updates.
 
 * Initial.
 
-[v1.0.1]: https://github.com/rstacruz/ractive-ractive/compare/v1.0.0...v1.0.1
+[v1.1.0]: https://github.com/rstacruz/ractive-ractive/compare/v1.0.0...v1.1.0
 [v1.0.0]: https://github.com/rstacruz/ractive-ractive/compare/v0.4.5...v1.0.0
 [v0.4.5]: https://github.com/rstacruz/ractive-ractive/compare/v0.4.4...v0.4.5
 [v0.4.4]: https://github.com/rstacruz/ractive-ractive/compare/v0.4.3...v0.4.4
