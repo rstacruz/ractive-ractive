@@ -14,7 +14,10 @@ if (typeof process === 'object') {
   global.Adaptor.maxKeyLength = 64; // faster tests
 
   global.suite = function (name, fn) {
-    mdescribe(name, versions, fn);
+    mdescribe(name, versions, function (Ractive) {
+      Ractive.DEBUG = false;
+      fn(Ractive);
+    });
   };
 } else {
   window.Adaptor = window.Ractive.adaptors.Ractive;
