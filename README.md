@@ -6,7 +6,6 @@ template-less Ractive objects as models.
 *Find more Ractive.js plugins at [docs.ractivejs.org/latest/plugins](http://docs.ractivejs.org/latest/plugins)*
 
 [![Status](https://travis-ci.org/rstacruz/ractive-ractive.svg?branch=master)](https://travis-ci.org/rstacruz/ractive-ractive "See test builds")
-[![](https://img.shields.io/badge/mocha--gray.svg)](https://rawgit.com/rstacruz/ractive-ractive/master/test/index.html)
 
 > ##### Note for v0.x users:
 > v1.0.0 changes the behavior of doing `require('ractive-ractive')` (eg, in Browserify). See [the changelog](HISTORY.md) for upgrade instructions.
@@ -88,8 +87,6 @@ ractive-ractive is available via npm.
 
     $ npm install --save ractive-ractive
 
-[![npm version](http://img.shields.io/npm/v/ractive-ractive.svg?style=flat)](https://npmjs.org/package/ractive-ractive "View this project on npm")
-
 In CommonJS:
 
 ```js
@@ -99,13 +96,16 @@ Ractive.defaults.adapt = ['Ractive'];
 
 Without module loaders, the adaptor is available as `"Ractive"` under `Ractive.adaptors.Ractive`.
 
+**Browser compatibilty:** available anywhere Ractive is. [(Test suite)](https://rawgit.com/rstacruz/ractive-ractive/master/test/index.html)
+
+[![npm version](http://img.shields.io/npm/v/ractive-ractive.svg)](https://npmjs.org/package/ractive-ractive "View this project on npm") &nbsp;
+
 <br>
 
 ## Credits
 
 Hat tip to the original Ractive adaptor from [@Rich-Harris].
 ([src](https://github.com/Rich-Harris/Ractive-plugins/blob/master/adaptors/Ractive.js))
-
 <br>
 
 ## Thanks
