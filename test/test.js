@@ -3,20 +3,19 @@
 var mdescribe = require('mocha-repeat');
 var expect = require('chai').expect;
 var semver = require('semver');
-var proxy = require('proxyquire');
 var versions = require('./support/versions');
+var Adaptor = require('../index');
+Adaptor.maxKeyLength = 64; // faster tests
 
 mdescribe('Ractive adaptor', versions, function (Ractive, version) {
-  var child, parent, adapt, subchild, user;
+  var child, parent, subchild, user;
   var isVersion = semver.satisfies.bind(semver, version);
 
   // Load dependencies
   before(function () {
     Ractive.DEBUG = false;
-    proxy('../index', { ractive: Ractive });
-    adapt = Ractive.adaptors.Ractive;
+    Ractive.adaptors.Ractive = Adaptor;
     Ractive.defaults.adapt = ['Ractive'];
-    adapt.maxKeyLength = 64; // faster tests
   });
 
   /*
@@ -263,17 +262,17 @@ mdescribe('Ractive adaptor', versions, function (Ractive, version) {
   describe('filter', function () {
     it('works', function () {
       var obj = new Ractive();
-      expect(adapt.filter(obj)).eql(true);
+      expect(Adaptor.filter(obj)).eql(true);
     });
 
     it('works for negatives: object', function () {
       var obj = {};
-      expect(adapt.filter(obj)).eql(false);
+      expect(Adaptor.filter(obj)).eql(false);
     });
 
     it('works for negatives: array', function () {
       var obj = [];
-      expect(adapt.filter(obj)).eql(false);
+      expect(Adaptor.filter(obj)).eql(false);
     });
   });
 
@@ -532,7 +531,7 @@ mdescribe('Ractive adaptor', versions, function (Ractive, version) {
    */
 
   afterEach(function expectLocksReleased () {
-    expect(Object.keys(adapt.locked)).length(0);
+    expect(Object.keys(Adaptor.locked)).length(0);
   });
 
 });

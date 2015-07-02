@@ -1,17 +1,17 @@
-/* global define */
+/* global define, Ractive */
 void (function (root, factory) {
 
   if (typeof define === 'function' && define.amd) {
-    define(['ractive'], factory);
+    define(factory);
   } else if (typeof exports === 'object') {
-    module.exports = factory(require('ractive'));
+    module.exports = factory();
   } else {
-    factory(root.Ractive);
+    Ractive.adaptors.Ractive = factory(root.Ractive);
   }
 
-}(this, function (Ractive) {
+}(this, function () {
 
-  var Adaptor = Ractive.adaptors.Ractive = {
+  var Adaptor = {
     filter: filter,
     wrap: wrap
   };
@@ -34,7 +34,7 @@ void (function (root, factory) {
    */
 
   function filter (child, keypath, parent) {
-    if (!(child instanceof Ractive)) return false;
+    if (!isRactiveInstance(child)) return false;
 
     if (parent &&
         parent._ractiveWraps &&
@@ -200,5 +200,21 @@ void (function (root, factory) {
       if (obj.hasOwnProperty(key)) fn(obj[key], key);
     }
   }
+
+  /*
+   * Check if an `obj instanceof Ractive`. This check will not require a
+   * reference to the root Ractive instance, however.
+   */
+
+  function isRactiveInstance (obj) {
+    return obj && obj.constructor &&
+      typeof obj._guid === 'string' &&
+      typeof obj.set === 'function' &&
+      typeof obj.off === 'function' &&
+      typeof obj.on === 'function' &&
+      typeof obj.constructor.defaults === 'object';
+  }
+
+  return Adaptor;
 
 }));
