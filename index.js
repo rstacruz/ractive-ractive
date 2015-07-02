@@ -192,7 +192,7 @@ void (function (root, factory) {
   }
 
   /*
-   * Cross-browser forEach helper
+   * Cross-browser forEach helper.
    */
 
   function each (obj, fn) {
@@ -203,7 +203,7 @@ void (function (root, factory) {
 
   /*
    * Check if an `obj instanceof Ractive`. This check will not require a
-   * reference to the root Ractive instance, however.
+   * reference to the root Ractive instance.
    */
 
   function isRactiveInstance (obj) {
