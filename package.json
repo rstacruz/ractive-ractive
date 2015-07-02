@@ -37,8 +37,5 @@
   },
   "scripts": {
     "test": "mocha"
-  },
-  "standard": {
-    "files": ["index.js", "test/test.js"]
   }
 }

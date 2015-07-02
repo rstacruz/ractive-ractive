@@ -1,8 +1,17 @@
+## v1.0.0 - Jul  2, 2015
+
+Just declaring 1.0.0-ness. No actual functionality changes.
+
+* Confirming support for 0.7.3 (with tests added).
+* Strengthened test suite.
+* Update coding style to semistandard.
+
 ## v0.4.5 - Apr 8, 2015
+
+Upkeep... no actual functionality changes.
 
 * Add LICENSE file.
 * Update package.json to point repository to GitHub.
-* No actual functionality changes.
 
 ## v0.4.4 - October  2, 2014
 

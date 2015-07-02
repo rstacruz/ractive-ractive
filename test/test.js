@@ -484,7 +484,6 @@ mdescribe('Ractive adaptor', versions, function (Ractive, version) {
       });
     });
 
-
     describe('numbers:', function () {
       beforeEach(function () {
         child.set('price', 10);
