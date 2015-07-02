@@ -80,23 +80,34 @@ void (function (root, factory) {
     };
 
     /*
-     * Initializes the adaptor. Performs a few tricks:
-     *
-     * [1] If the child has its own Ractive instances, recurse upwards. This
-     * will do `parent.set('child.grandchild', instance)` so that the
-     * `parent` can listen to the grandchild.
+     * Initializes the adaptor.
      */
 
     function setup () {
       checkForRecursion();
       markAsWrapped();
-      parent.set(prefixer(get())); // [1]
+      propagateSubinstances();
       child.on('change', onChange);
 
       if (Adaptor.fireWrapEvents) {
         child.fire('wrap', parent, keypath);
         parent.fire('wrapchild', child, keypath);
       }
+    }
+
+    /*
+     * If the child has its own Ractive instances, recurse upwards. This
+     * will do `parent.set('child.grandchild', instance)` so that the
+     * `parent` can listen to the grandchild.
+     */
+
+    function propagateSubinstances () {
+      var re = {};
+      each(child.get(), function (val, key) {
+        if (isRactiveInstance(val)) re[key] = val;
+      });
+
+      parent.set(prefixer(re));
     }
 
     function teardown () {

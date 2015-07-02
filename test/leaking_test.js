@@ -1,5 +1,5 @@
-/* global describe, it, beforeEach */
-/* global expect, suite */
+/* global describe, it, beforeEach, before */
+/* global expect, Adaptor, suite */
 if (typeof require === 'function') require('./setup');
 
 /*
@@ -9,6 +9,12 @@ if (typeof require === 'function') require('./setup');
  */
 
 suite('Ractive adaptor', function (Ractive) {
+  before(function () {
+    Ractive.DEBUG = false;
+    Ractive.adaptors.Ractive = Adaptor;
+    Ractive.defaults.adapt = ['Ractive'];
+  });
+
   var child, parent;
 
   describe('Leaking tests', function () {
@@ -23,19 +29,16 @@ suite('Ractive adaptor', function (Ractive) {
       expect(child.get('data')).eql('datum');
     });
 
-    describe.skip('failing cases (as of v1.1.0)', function () {
-      it('.data accessed via parent', function () {
-        child.set('data', 'datum');
-        parent.set('child', child);
-        expect(parent.get('child.data')).eql('datum');
-        // seems to return child.data the instance variable
-      });
+    it('.data accessed via parent', function () {
+      child.set('data', 'datum');
+      parent.set('child', child);
+      expect(parent.get('child.data')).eql('datum');
+    });
 
-      it('setting child.data on the parent', function () {
-        parent.set('child', child);
-        parent.set('child.data', 'other_value');
-        expect(child.get('data')).eql('other_value');
-      });
+    it('setting child.data on the parent', function () {
+      parent.set('child', child);
+      parent.set('child.data', 'other_value');
+      expect(child.get('data')).eql('other_value');
     });
   });
 });
