@@ -21,7 +21,6 @@ suite('Ractive adaptor', function (Ractive) {
     beforeEach(function () {
       parent = new Ractive();
       child = new Ractive();
-      subchild = new Ractive();
     });
 
     it('.data on child is left alone', function () {

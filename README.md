@@ -6,7 +6,7 @@ template-less Ractive objects as models.
 *Find more Ractive.js plugins at [docs.ractivejs.org/latest/plugins](http://docs.ractivejs.org/latest/plugins)*
 
 [![Status](https://travis-ci.org/rstacruz/ractive-ractive.svg?branch=master)](https://travis-ci.org/rstacruz/ractive-ractive "See test builds")
-[![](https://img.shields.io/badge/-mocha-lightgray.svg)](https://rawgit.com/rstacruz/ractive-ractive/master/test/index.html)
+[![](https://img.shields.io/badge/mocha--gray.svg)](https://rawgit.com/rstacruz/ractive-ractive/master/test/index.html)
 
 > ##### Note for v0.x users:
 > v1.0.0 changes the behavior of doing `require('ractive-ractive')` (eg, in Browserify). See [the changelog](HISTORY.md) for upgrade instructions.
