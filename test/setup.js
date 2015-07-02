@@ -28,4 +28,3 @@ if (typeof process === 'object') {
     });
   };
 }
-
