@@ -86,11 +86,14 @@ ractive-ractive is available via npm.
 
 [![npm version](http://img.shields.io/npm/v/ractive-ractive.svg?style=flat)](https://npmjs.org/package/ractive-ractive "View this project on npm")
 
-Require the module to use. No need to consume the return value.
+In CommonJS:
 
 ```js
-require('ractive-ractive')
+Ractive.adaptors.Ractive = require('ractive-ractive');
+Ractive.defaults.adapt = ['Ractive'];
 ```
+
+Without module loaders, the adaptor is available as `"Ractive"` under `Ractive.adaptors.Ractive`.
 
 <br>
 
