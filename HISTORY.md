@@ -1,6 +1,10 @@
-## [v1.0.1] - Jul  2, 2015
+## [v1.1.0] - Jul  2, 2015
 
-Allow support for using with Ractive runtime in Browserify.
+Allow support for using with Ractive runtime in Browserify. This is a breaking change for Browserify users, you now have to do:
+
+```js
+Ractive.adaptors.Ractive = require('ractive-ractive');
+```
 
 * The module `"ractive"` is no longer explictly required. ([#2])
 

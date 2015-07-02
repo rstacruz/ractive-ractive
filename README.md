@@ -7,6 +7,9 @@ template-less Ractive objects as models.
 
 [![Status](https://travis-ci.org/rstacruz/ractive-ractive.svg?branch=master)](https://travis-ci.org/rstacruz/ractive-ractive "See test builds")
 
+> ##### Note for v0.x users:
+> v1.0.0 changes the behavior of doing `require('ractive-ractive')` (eg, in Browserify). See [the changelog](HISTORY.md) for upgrade instructions.
+
 <br>
 
 ## Example
