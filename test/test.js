@@ -7,22 +7,16 @@ var proxy = require('proxyquire');
 var versions = require('./support/versions');
 
 mdescribe('Ractive adaptor', versions, function (Ractive, version) {
-  Ractive.DEBUG = false;
-
   var child, parent, adapt, subchild, user;
-
   var isVersion = semver.satisfies.bind(semver, version);
 
   // Load dependencies
   before(function () {
+    Ractive.DEBUG = false;
     proxy('../index', { ractive: Ractive });
     adapt = Ractive.adaptors.Ractive;
     Ractive.defaults.adapt = ['Ractive'];
-  });
-
-  // Makes tests faster
-  before(function () {
-    adapt.maxKeyLength = 64;
+    adapt.maxKeyLength = 64; // faster tests
   });
 
   /*
