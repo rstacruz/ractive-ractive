@@ -4,19 +4,14 @@ var mdescribe = require('mocha-repeat');
 var expect = require('chai').expect;
 var semver = require('semver');
 var proxy = require('proxyquire');
-
-var versions = {
-  '0.7.3': require('../vendor/ractive/ractive-0.7.3.js'),
-  '0.6.0': require('../vendor/ractive/ractive-0.6.0.js'),
-  '0.5.8': require('../vendor/ractive/ractive-0.5.8.js'),
-  '0.5.5': require('../vendor/ractive/ractive-0.5.5.js'),
-  '0.5.0': require('../vendor/ractive/ractive-0.5.0.js')
-};
+var versions = require('./support/versions');
 
 mdescribe('Ractive adaptor', versions, function (Ractive, version) {
   Ractive.DEBUG = false;
 
   var child, parent, adapt, subchild, user;
+
+  var isVersion = semver.satisfies.bind(semver, version);
 
   // Load dependencies
   before(function () {
@@ -49,7 +44,7 @@ mdescribe('Ractive adaptor', versions, function (Ractive, version) {
       expect(parent.get('child.one')).eql(1);
     });
 
-    forVersion('> 0.5.0', function () {
+    if (isVersion('> 0.5.0')) {
       it('.reset on child gets picked up', function () {
         parent.set('child', child);
         child.reset({ ten: 10, eleven: 11 });
@@ -57,7 +52,7 @@ mdescribe('Ractive adaptor', versions, function (Ractive, version) {
         expect(parent.get('child.ten')).eql(10);
         expect(parent.get('child.eleven')).eql(11);
       });
-    });
+    }
 
     it('propagates changes from child to parent', function () {
       child.set('two', 1);
@@ -450,24 +445,92 @@ mdescribe('Ractive adaptor', versions, function (Ractive, version) {
     });
 
     // Only in 0.6.0+ - https://github.com/ractivejs/ractive/issues/1285
-    forVersion('>= 0.6.0', function () {
+    if (isVersion('>= 0.6.0')) {
       it('allows you to set the data via the wrapper', function () {
         one.set('audio.volume', 70);
         expect(one.get('audio.volume')).eql(70);
         expect(two.get('audio.volume')).eql(70);
         expect(audio.get('volume')).eql(70);
       });
-    });
+    }
   });
 
   // Only in 0.6.0+ - https://github.com/ractivejs/ractive/issues/1285
-  forVersion('>= 0.6.0', function () {
+  if (isVersion('>= 0.6.0')) {
     it('set before get', function () {
       child = new Ractive();
       parent = new Ractive({ data: { child: child }});
 
       parent.set('child.enabled', true);
       expect(parent.get('child.enabled')).eql(true);
+    });
+  }
+
+  describe('instance methods:', function () {
+    beforeEach(function () {
+      child = new Ractive();
+      parent = new Ractive();
+      parent.set('child', child);
+    });
+
+    describe('.set():', function () {
+      it('with value', function () {
+        parent.set('child.counter', 1);
+        expect(child.get('counter')).eql(1);
+      });
+
+      it('via object', function () {
+        parent.set({ 'child.counter': 1 });
+        expect(child.get('counter')).eql(1);
+      });
+
+      it('via nested object', function () {
+        parent.set({ child: { counter: 1 }});
+        expect(child.get('counter')).eql(1);
+      });
+    });
+
+
+    describe('numbers:', function () {
+      beforeEach(function () {
+        child.set('price', 10);
+      });
+
+      it('add()', function () {
+        parent.add('child.price', 10);
+        expect(child.get('price'), 20);
+      });
+
+      it('subtract()', function () {
+        parent.subtract('child.price', 3);
+        expect(child.get('price'), 7);
+      });
+    });
+
+    describe('lists:', function () {
+      beforeEach(function () {
+        child.set('list', ['a', 'b']);
+      });
+
+      it('.merge()', function () {
+        parent.merge('child.list', ['a', 'b', 'c']);
+        expect(child.get('list')).eql(['a', 'b', 'c']);
+      });
+
+      it('.push()', function () {
+        parent.push('child.list', 'c');
+        expect(child.get('list')).eql(['a', 'b', 'c']);
+      });
+
+      it('.pop()', function () {
+        parent.pop('child.list');
+        expect(child.get('list')).eql(['a']);
+      });
+
+      it('.unshift()', function () {
+        parent.unshift('child.list', 'x');
+        expect(child.get('list')).eql(['x', 'a', 'b']);
+      });
     });
   });
 
@@ -478,13 +541,5 @@ mdescribe('Ractive adaptor', versions, function (Ractive, version) {
   afterEach(function expectLocksReleased () {
     expect(Object.keys(adapt.locked)).length(0);
   });
-
-  /*
-   * helper
-   */
-
-  function forVersion (spec, fn) {
-    if (semver.satisfies(version, spec)) describe(spec, fn);
-  }
 
 });
