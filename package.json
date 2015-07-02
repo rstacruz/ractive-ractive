@@ -10,7 +10,7 @@
     "chai": "^3.0.0",
     "mocha": "^2.2.5",
     "mocha-repeat": "^0.1.0",
-    "mocha-standard": "^0.1.0",
+    "mocha-standard": "^1.0.0",
     "proxyquire": "^1.0.1",
     "ractive": "*",
     "semistandard": "^6.1.1",
