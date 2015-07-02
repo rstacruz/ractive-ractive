@@ -1,3 +1,10 @@
+## [v1.1.1]
+
+* [#1] - Fix a nasty bug where using keys that are named as Ractive methods can lead to unexpected results (eg, `ractive.set('template', 'x')`). Thanks [@ElliotChong]
+
+[@ElliotChong]: https://github.com/ElliotChong
+[#1]: https://github.com/rstacruz/ractive-ractive/issues/1
+
 ## [v1.1.0] - Jul  2, 2015
 
 Allow support for using with Ractive runtime in Browserify. This is a breaking change for Browserify users, you now have to do:
@@ -76,6 +83,7 @@ No code changes, just package info and readme updates.
 
 * Initial.
 
+[v1.1.1]: https://github.com/rstacruz/ractive-ractive/compare/v1.1.0...v1.1.1
 [v1.1.0]: https://github.com/rstacruz/ractive-ractive/compare/v1.0.0...v1.1.0
 [v1.0.0]: https://github.com/rstacruz/ractive-ractive/compare/v0.4.5...v1.0.0
 [v0.4.5]: https://github.com/rstacruz/ractive-ractive/compare/v0.4.4...v0.4.5
