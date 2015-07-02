@@ -1,15 +1,12 @@
 /* global describe, it, beforeEach, afterEach, before */
+/* global expect, Adaptor, suite, semver */
 /* jshint expr: true */
-var mdescribe = require('mocha-repeat');
-var expect = require('chai').expect;
-var semver = require('semver');
-var versions = require('./support/versions');
-var Adaptor = require('../index');
-Adaptor.maxKeyLength = 64; // faster tests
 
-mdescribe('Ractive adaptor', versions, function (Ractive, version) {
+if (typeof require === 'function') require('./setup');
+
+suite('Ractive adaptor', function (Ractive) {
   var child, parent, subchild, user;
-  var isVersion = semver.satisfies.bind(semver, version);
+  var isVersion = semver.satisfies.bind(semver, Ractive.VERSION);
 
   // Load dependencies
   before(function () {
