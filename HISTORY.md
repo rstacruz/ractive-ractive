@@ -1,3 +1,7 @@
+## master
+
+* Officially drop support for versions below v0.6.0. It had some broken edge cases anyway.
+
 ## [v1.1.1] - Jul  3, 2015
 
 * [#1] - Fix a nasty bug where using keys that are named as Ractive methods can lead to unexpected results (eg, `ractive.set('template', 'x')`). Thanks [@ElliotChong]
