@@ -1,4 +1,4 @@
-/* global describe, it, beforeEach, before */
+/* global it, beforeEach, before */
 /* global expect, Adaptor, suite */
 if (typeof require === 'function') require('./setup');
 
@@ -63,7 +63,7 @@ suite('Arrays', function (Ractive) {
 
   it('can be popped', function () {
     parent.set('children', children);
-    parent.pop('children')
+    parent.pop('children');
 
     expect(parent.get('children[2].name')).eql(undefined);
   });

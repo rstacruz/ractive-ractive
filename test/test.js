@@ -1,12 +1,11 @@
 /* global describe, it, beforeEach, afterEach, before */
-/* global expect, Adaptor, suite, semver */
+/* global expect, Adaptor, suite */
 /* jshint expr: true */
 
 if (typeof require === 'function') require('./setup');
 
 suite('Ractive adaptor', function (Ractive) {
   var child, parent, subchild, user;
-  var isVersion = semver.satisfies.bind(semver, Ractive.VERSION);
 
   // Load dependencies
   before(function () {
@@ -34,15 +33,13 @@ suite('Ractive adaptor', function (Ractive) {
       expect(parent.get('child.one')).eql(1);
     });
 
-    if (isVersion('> 0.5.0')) {
-      it('.reset on child gets picked up', function () {
-        parent.set('child', child);
-        child.reset({ ten: 10, eleven: 11 });
+    it('.reset on child gets picked up', function () {
+      parent.set('child', child);
+      child.reset({ ten: 10, eleven: 11 });
 
-        expect(parent.get('child.ten')).eql(10);
-        expect(parent.get('child.eleven')).eql(11);
-      });
-    }
+      expect(parent.get('child.ten')).eql(10);
+      expect(parent.get('child.eleven')).eql(11);
+    });
 
     it('propagates changes from child to parent', function () {
       child.set('two', 1);
@@ -462,26 +459,22 @@ suite('Ractive adaptor', function (Ractive) {
     });
 
     // Only in 0.6.0+ - https://github.com/ractivejs/ractive/issues/1285
-    if (isVersion('>= 0.6.0')) {
-      it('allows you to set the data via the wrapper', function () {
-        one.set('audio.volume', 70);
-        expect(one.get('audio.volume')).eql(70);
-        expect(two.get('audio.volume')).eql(70);
-        expect(audio.get('volume')).eql(70);
-      });
-    }
+    it('allows you to set the data via the wrapper', function () {
+      one.set('audio.volume', 70);
+      expect(one.get('audio.volume')).eql(70);
+      expect(two.get('audio.volume')).eql(70);
+      expect(audio.get('volume')).eql(70);
+    });
   });
 
   // Only in 0.6.0+ - https://github.com/ractivejs/ractive/issues/1285
-  if (isVersion('>= 0.6.0')) {
-    it('set before get', function () {
-      child = new Ractive();
-      parent = new Ractive({ data: { child: child }});
+  it('set before get', function () {
+    child = new Ractive();
+    parent = new Ractive({ data: { child: child }});
 
-      parent.set('child.enabled', true);
-      expect(parent.get('child.enabled')).eql(true);
-    });
-  }
+    parent.set('child.enabled', true);
+    expect(parent.get('child.enabled')).eql(true);
+  });
 
   describe('instance methods:', function () {
     beforeEach(function () {
