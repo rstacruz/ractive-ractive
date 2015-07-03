@@ -9,7 +9,6 @@ if (typeof process === 'object') {
   var versions = require('./support/versions');
 
   global.expect = require('chai').expect;
-  global.semver = require('semver');
   global.Adaptor = require('../index');
   global.Adaptor.maxKeyLength = 64; // faster tests
 
@@ -41,7 +40,6 @@ if (typeof process === 'object') {
   window.Adaptor = window.Ractive.adaptors.Ractive;
   window.Adaptor.maxKeyLength = 64;
   window.expect = window.chai.expect;
-  window.semver = window.semver;
   window.require = function () { /* noop */ };
 
   window.suite = function (name, fn) {
