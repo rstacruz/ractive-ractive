@@ -11,12 +11,6 @@ require('../setup');
 suite('Leaking tests', function (Ractive) {
   var child, parent;
 
-  before(function () {
-    Ractive.DEBUG = false;
-    Ractive.adaptors.Ractive = Adaptor;
-    Ractive.defaults.adapt = ['Ractive'];
-  });
-
   beforeEach(function () {
     parent = new Ractive();
     child = new Ractive();

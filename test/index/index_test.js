@@ -6,12 +6,6 @@ require('../setup');
 suite('Ractive adaptor', function (Ractive) {
   var child, parent, subchild, user;
 
-  before(function () {
-    Ractive.DEBUG = false;
-    Ractive.adaptors.Ractive = Adaptor;
-    Ractive.defaults.adapt = ['Ractive'];
-  });
-
   /*
    * simple cases
    */

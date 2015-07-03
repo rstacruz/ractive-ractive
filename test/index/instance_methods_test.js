@@ -6,12 +6,6 @@ require('../setup');
 suite('Instance methods', function (Ractive) {
   var child, parent, subchild, user;
 
-  before(function () {
-    Ractive.DEBUG = false;
-    Ractive.adaptors.Ractive = Adaptor;
-    Ractive.defaults.adapt = ['Ractive'];
-  });
-
   beforeEach(function () {
     child = new Ractive();
     parent = new Ractive();

@@ -5,12 +5,6 @@ require('../setup');
 suite('Arrays', function (Ractive) {
   var parent, children;
 
-  before(function () {
-    Ractive.DEBUG = false;
-    Ractive.adaptors.Ractive = Adaptor;
-    Ractive.defaults.adapt = ['Ractive'];
-  });
-
   beforeEach(function () {
     children = [];
     parent = new Ractive();
