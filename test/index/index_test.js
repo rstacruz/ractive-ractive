@@ -1,8 +1,7 @@
 /* global describe, it, beforeEach, afterEach, before */
 /* global expect, Adaptor, suite */
 /* jshint expr: true */
-
-if (typeof require === 'function') require('./setup');
+require('../setup');
 
 suite('Ractive adaptor', function (Ractive) {
   var child, parent, subchild, user;

@@ -1,9 +1,8 @@
 /* global it, beforeEach, before */
 /* global expect, Adaptor, suite */
-if (typeof require === 'function') require('./setup');
+require('../setup');
 
 suite('Arrays', function (Ractive) {
-  if (Ractive.VERSION.match(/^0\.5/)) return;
   var parent, children;
 
   before(function () {

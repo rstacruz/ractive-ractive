@@ -1,6 +1,6 @@
 /* global it, beforeEach, before */
 /* global expect, Adaptor, suite */
-if (typeof require === 'function') require('./setup');
+require('../setup');
 
 /*
  * These tests are part of a long discussion on:
