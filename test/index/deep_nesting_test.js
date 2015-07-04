@@ -17,7 +17,7 @@ suite('Deeply-nested cases', function (Ractive) {
       parent.set('child', child);
       child.set('subchild', subchild);
       subchild.set('parent', parent);
-    }).throw(/circular/);
+    }).toThrow(/circular/);
   });
 
   describe('when organized linearly', function () {
@@ -28,26 +28,26 @@ suite('Deeply-nested cases', function (Ractive) {
 
     it('works upwards', function () {
       subchild.set('enabled', 20);
-      expect(parent.get('child.subchild.enabled')).eql(20);
+      expect(parent.get('child.subchild.enabled')).toEqual(20);
 
       subchild.set('enabled', 200);
-      expect(parent.get('child.subchild.enabled')).eql(200);
+      expect(parent.get('child.subchild.enabled')).toEqual(200);
     });
 
     it('works downwards', function () {
       parent.set('child.subchild.enabled', 20);
 
-      expect(subchild.get('enabled')).eql(20);
-      expect(child.get('subchild.enabled')).eql(20);
-      expect(parent.get('child.subchild.enabled')).eql(20);
+      expect(subchild.get('enabled')).toEqual(20);
+      expect(child.get('subchild.enabled')).toEqual(20);
+      expect(parent.get('child.subchild.enabled')).toEqual(20);
     });
 
     it('handles teardown properly', function () {
       parent.set('child.subchild.enabled', 20);
       child.set('subchild', undefined);
 
-      expect(parent.get('child.subchild.enabled')).be.undefined;
-      expect(child.get('subchild.enabled')).be.undefined;
+      expect(parent.get('child.subchild.enabled')).toEqual(undefined);
+      expect(child.get('subchild.enabled')).toEqual(undefined);
     });
   });
 
@@ -59,26 +59,26 @@ suite('Deeply-nested cases', function (Ractive) {
 
     it('works upwards', function () {
       subchild.set('enabled', 20);
-      expect(parent.get('child.subchild.enabled')).eql(20);
+      expect(parent.get('child.subchild.enabled')).toEqual(20);
 
       subchild.set('enabled', 200);
-      expect(parent.get('child.subchild.enabled')).eql(200);
+      expect(parent.get('child.subchild.enabled')).toEqual(200);
     });
 
     it('works downwards', function () {
       parent.set('child.subchild.enabled', 19);
 
-      expect(subchild.get('enabled')).eql(19);
-      expect(child.get('subchild.enabled')).eql(19);
-      expect(parent.get('child.subchild.enabled')).eql(19);
+      expect(subchild.get('enabled')).toEqual(19);
+      expect(child.get('subchild.enabled')).toEqual(19);
+      expect(parent.get('child.subchild.enabled')).toEqual(19);
     });
 
     it('handles teardown properly', function () {
       parent.set('child.subchild.enabled', 20);
       child.set('subchild', undefined);
 
-      expect(parent.get('child.subchild.enabled')).be.undefined;
-      expect(child.get('subchild.enabled')).be.undefined;
+      expect(parent.get('child.subchild.enabled')).toEqual(undefined);
+      expect(child.get('subchild.enabled')).toEqual(undefined);
     });
   });
 });

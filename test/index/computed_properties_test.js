@@ -27,30 +27,30 @@ suite('Computed properties', function (Ractive) {
   });
 
   it('sanity check', function () {
-    expect(user.get('full')).eql('Jon Snow');
+    expect(user.get('full')).toEqual('Jon Snow');
   });
 
   it('works on the first run', function () {
     parent.set('user', user);
-    expect(parent.get('user.full')).eql('Jon Snow');
+    expect(parent.get('user.full')).toEqual('Jon Snow');
   });
 
   it('propagates when something changes by proxy', function () {
     parent.set('user', user);
     parent.set('user.last', 'Stewart');
-    expect(user.get('full')).eql('Jon Stewart');
+    expect(user.get('full')).toEqual('Jon Stewart');
   });
 
   it('propagates when something changes by proxy, and checked on parent', function () {
     parent.set('user', user);
     parent.set('user.last', 'Stewart');
-    expect(parent.get('user.full')).eql('Jon Stewart');
+    expect(parent.get('user.full')).toEqual('Jon Stewart');
   });
 
   it('propagates when something changes', function () {
     parent.set('user', user);
     parent.set('user.last', 'Stewart');
-    expect(parent.get('user.full')).eql('Jon Stewart');
+    expect(parent.get('user.full')).toEqual('Jon Stewart');
   });
 
   describe('setters', function () {
@@ -60,15 +60,15 @@ suite('Computed properties', function (Ractive) {
     });
 
     it('works when accessed via parent', function () {
-      expect(parent.get('user.first')).eql('Arya');
-      expect(parent.get('user.last')).eql('Stark');
-      expect(parent.get('user.full')).eql('Arya Stark');
+      expect(parent.get('user.first')).toEqual('Arya');
+      expect(parent.get('user.last')).toEqual('Stark');
+      expect(parent.get('user.full')).toEqual('Arya Stark');
     });
 
     it('works when accessed via child', function () {
-      expect(user.get('first')).eql('Arya');
-      expect(user.get('last')).eql('Stark');
-      expect(user.get('full')).eql('Arya Stark');
+      expect(user.get('first')).toEqual('Arya');
+      expect(user.get('last')).toEqual('Stark');
+      expect(user.get('full')).toEqual('Arya Stark');
     });
   });
 
@@ -79,15 +79,15 @@ suite('Computed properties', function (Ractive) {
     });
 
     it('works when accessed via parent', function () {
-      expect(parent.get('user.first')).eql('Arya');
-      expect(parent.get('user.last')).eql('Stark');
-      expect(parent.get('user.full')).eql('Arya Stark');
+      expect(parent.get('user.first')).toEqual('Arya');
+      expect(parent.get('user.last')).toEqual('Stark');
+      expect(parent.get('user.full')).toEqual('Arya Stark');
     });
 
     it('works when accessed via child', function () {
-      expect(user.get('first')).eql('Arya');
-      expect(user.get('last')).eql('Stark');
-      expect(user.get('full')).eql('Arya Stark');
+      expect(user.get('first')).toEqual('Arya');
+      expect(user.get('last')).toEqual('Stark');
+      expect(user.get('full')).toEqual('Arya Stark');
     });
   });
 });

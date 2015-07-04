@@ -15,17 +15,17 @@ suite('Instance methods', function (Ractive) {
   describe('.set():', function () {
     it('with value', function () {
       parent.set('child.counter', 1);
-      expect(child.get('counter')).eql(1);
+      expect(child.get('counter')).toEqual(1);
     });
 
     it('via object', function () {
       parent.set({ 'child.counter': 1 });
-      expect(child.get('counter')).eql(1);
+      expect(child.get('counter')).toEqual(1);
     });
 
     it('via nested object', function () {
       parent.set({ child: { counter: 1 }});
-      expect(child.get('counter')).eql(1);
+      expect(child.get('counter')).toEqual(1);
     });
   });
 
@@ -52,22 +52,22 @@ suite('Instance methods', function (Ractive) {
 
     it('.merge()', function () {
       parent.merge('child.list', ['a', 'b', 'c']);
-      expect(child.get('list')).eql(['a', 'b', 'c']);
+      expect(child.get('list')).toEqual(['a', 'b', 'c']);
     });
 
     it('.push()', function () {
       parent.push('child.list', 'c');
-      expect(child.get('list')).eql(['a', 'b', 'c']);
+      expect(child.get('list')).toEqual(['a', 'b', 'c']);
     });
 
     it('.pop()', function () {
       parent.pop('child.list');
-      expect(child.get('list')).eql(['a']);
+      expect(child.get('list')).toEqual(['a']);
     });
 
     it('.unshift()', function () {
       parent.unshift('child.list', 'x');
-      expect(child.get('list')).eql(['x', 'a', 'b']);
+      expect(child.get('list')).toEqual(['x', 'a', 'b']);
     });
   });
 });

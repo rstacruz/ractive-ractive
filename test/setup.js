@@ -8,9 +8,11 @@ if (typeof process === 'object') {
   var mdescribe = require('mocha-repeat');
   var versions = require('./support/versions');
 
-  global.expect = require('chai').expect;
+  global.expect = require('expect');
   global.Adaptor = require('../index');
   global.Adaptor.maxKeyLength = 64; // faster tests
+
+  require('expect-html-equal');
 
   /*
    * Make the Ractive instance act like how it would in the browser, ie, with
@@ -39,7 +41,6 @@ if (typeof process === 'object') {
   window.Ractive.defaults.adapt = ['Ractive'];
   window.Adaptor = window.Ractive.adaptors.Ractive;
   window.Adaptor.maxKeyLength = 64;
-  window.expect = window.chai.expect;
   window.require = function () { /* noop */ };
 
   window.suite = function (name, fn) {

@@ -25,8 +25,8 @@ suite('Leaking params to instance variables (#2)', function (Ractive) {
   });
 
   it('doesn\'t leak data properties on to the Ractive instances', function () {
-    expect(subchild.subchildProperty).be.undefined;
-    expect(child.childProperty).be.undefined;
-    expect(parent.parentProperty).be.undefined;
+    expect(subchild.subchildProperty).toEqual(undefined);
+    expect(child.childProperty).toEqual(undefined);
+    expect(parent.parentProperty).toEqual(undefined);
   });
 });

@@ -12,7 +12,7 @@ suite('Wrap event', function (Ractive) {
 
   it('fires the "wrap" event', function (next) {
     child.on('wrap', function (_parent, key) {
-      expect(key).eql('child');
+      expect(key).toEqual('child');
       next();
     });
 
@@ -21,7 +21,7 @@ suite('Wrap event', function (Ractive) {
 
   it('fires the "unwrap" event after reset', function (next) {
     child.on('unwrap', function (_parent, key) {
-      expect(key).eql('child');
+      expect(key).toEqual('child');
       next();
     });
 

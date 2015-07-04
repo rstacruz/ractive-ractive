@@ -19,18 +19,18 @@ suite('Leaking tests', function (Ractive) {
   it('.data on child is left alone', function () {
     child.set('data', 'datum');
     parent.set('child', child);
-    expect(child.get('data')).eql('datum');
+    expect(child.get('data')).toEqual('datum');
   });
 
   it('.data accessed via parent', function () {
     child.set('data', 'datum');
     parent.set('child', child);
-    expect(parent.get('child.data')).eql('datum');
+    expect(parent.get('child.data')).toEqual('datum');
   });
 
   it('setting child.data on the parent', function () {
     parent.set('child', child);
     parent.set('child.data', 'other_value');
-    expect(child.get('data')).eql('other_value');
+    expect(child.get('data')).toEqual('other_value');
   });
 });

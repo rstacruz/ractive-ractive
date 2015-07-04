@@ -24,8 +24,8 @@ suite('Set on observe', function (Ractive) {
 
     child.set('banana', 'pancake');
 
-    expect(child.get('banana')).eql('pancake');
-    expect(parent.get('apple')).eql('pancake');
+    expect(child.get('banana')).toEqual('pancake');
+    expect(parent.get('apple')).toEqual('pancake');
   });
 
   it('works when observed from parent', function () {
@@ -37,11 +37,11 @@ suite('Set on observe', function (Ractive) {
 
     child.set('banana', 'pancake');
 
-    expect(child.get('banana')).eql('pancake');
-    expect(parent.get('apple')).eql('pancake');
+    expect(child.get('banana')).toEqual('pancake');
+    expect(parent.get('apple')).toEqual('pancake');
   });
 
   afterEach(function expectLocksReleased () {
-    expect(Object.keys(Adaptor.locked)).length(0);
+    expect(Object.keys(Adaptor.locked).length).toEqual(0);
   });
 });
