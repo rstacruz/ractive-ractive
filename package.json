@@ -37,6 +37,6 @@
   },
   "scripts": {
     "test": "mocha",
-    "coverage": "istanbul cover _mocha && istanbul report html && ls coverage"
+    "coverage": "istanbul cover _mocha -- -R spec"
   }
 }
